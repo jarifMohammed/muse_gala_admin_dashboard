@@ -57,6 +57,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
+        sans: ["Avenir", "sans-serif"],
         avenir: ["Avenir", "sans-serif"],
         "avenir-arabic": ["Avenir Arabic", "sans-serif"],
       },

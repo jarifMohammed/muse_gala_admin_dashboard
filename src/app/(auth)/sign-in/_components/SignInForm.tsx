@@ -68,7 +68,7 @@ export default function SignInForm() {
                     <Mail className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-black" />
                     <Input
                       placeholder="Enter Your Email"
-                      className="font-avenir w-full h-[40px] bg-transparent border-0 border-b-2 border-black text-[12px]  placeholder:text-[12px] placeholder:text-black/50 placeholder:font-normal pl-8 pr-0 rounded-none focus-visible:ring-0 focus-visible:border-b-black transition-none shadow-none"
+                      className="w-full h-[40px] bg-transparent border-0 border-b-2 border-black text-[12px]  placeholder:text-[12px] placeholder:text-black/50 placeholder:font-normal pl-8 pr-0 rounded-none focus-visible:ring-0 focus-visible:border-b-black transition-none shadow-none"
                       {...field}
                     />
                   </div>
@@ -91,7 +91,7 @@ export default function SignInForm() {
                       <Input
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Enter Your Password"
-                        className="font-avenir w-full h-[40px] bg-transparent border-0 border-b-2 border-black text-[12px]  placeholder:text-[12px] placeholder:text-black/50 placeholder:font-normal pl-8 pr-12 rounded-none focus-visible:ring-0 focus-visible:border-b-black transition-none shadow-none"
+                        className="w-full h-[40px] bg-transparent border-0 border-b-2 border-black text-[12px]  placeholder:text-[12px] placeholder:text-black/50 placeholder:font-normal pl-8 pr-12 rounded-none focus-visible:ring-0 focus-visible:border-b-black transition-none shadow-none"
                         {...field}
                       />
                       <button
@@ -119,7 +119,7 @@ export default function SignInForm() {
               <Checkbox id="remember" className="border-black data-[state=checked]:bg-black" />
               <label
                 htmlFor="remember"
-                className="font-avenir text-[12px] text-black cursor-pointer uppercase"
+                className="text-[12px] text-black cursor-pointer uppercase"
               >
                 REMEMBER ME
               </label>
@@ -133,7 +133,7 @@ export default function SignInForm() {
               className="group flex items-center gap-4 disabled:opacity-50"
               disabled={isPending}
             >
-              <span className="font-avenir text-[14px] uppercase tracking-10 text-black">
+              <span className="text-[14px] uppercase tracking-10 text-black">
                 {isPending ? 'SIGNING IN...' : 'SIGN IN'}
               </span>
               <ArrowRight className="w-5 h-5 text-black group-hover:translate-x-1 transition-transform" />

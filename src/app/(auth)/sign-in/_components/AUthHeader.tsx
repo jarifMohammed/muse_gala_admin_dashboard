@@ -16,10 +16,10 @@ const AuthHeader = () => {
 
       {/* Heading */}
       <div className="text-center pb-[12px] md:pb-[15px]">
-        <h1 className="font-avenir-arabic font-light text-[24px] uppercase text-black leading-none tracking-20 mb-[23.5px]">
+        <h1 className="font-light text-[24px] uppercase text-black leading-none tracking-20 mb-[23.5px]">
           MUSE GALA
         </h1>
-        <p className="font-avenir font-normal text-[16px] uppercase text-black leading-none tracking-10">
+        <p className="font-normal text-[16px] uppercase text-black leading-none tracking-10">
           THE ADMIN SUITE
         </p>
       </div>
