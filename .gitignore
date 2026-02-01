@@ -1,0 +1,7 @@
+.env/
+node_modules
+
+# Next.js
+.next/
+
+.next/
