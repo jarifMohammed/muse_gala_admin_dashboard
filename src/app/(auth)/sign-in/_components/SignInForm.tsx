@@ -10,7 +10,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { loginformSchema, LoginFormValues } from '@/schemas/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { ArrowRight, Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
@@ -64,11 +64,14 @@ export default function SignInForm() {
             render={({ field }) => (
               <FormItem className="w-full md:w-[400px]">
                 <FormControl>
-                  <Input
-                    placeholder="ENTER EMAIL"
-                    className="font-avenir w-full h-[40px] bg-transparent border-0 border-b-2 border-black text-[12px] lowercase placeholder:text-[12px] placeholder:text-black/50 placeholder:font-normal px-0 rounded-none focus-visible:ring-0 focus-visible:border-b-black transition-none shadow-none"
-                    {...field}
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-black" />
+                    <Input
+                      placeholder="Enter Your Email"
+                      className="font-avenir w-full h-[40px] bg-transparent border-0 border-b-2 border-black text-[12px]  placeholder:text-[12px] placeholder:text-black/50 placeholder:font-normal pl-8 pr-0 rounded-none focus-visible:ring-0 focus-visible:border-b-black transition-none shadow-none"
+                      {...field}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage className="text-[10px] mt-1" />
               </FormItem>
@@ -84,10 +87,11 @@ export default function SignInForm() {
                 <FormItem>
                   <FormControl>
                     <div className="relative">
+                      <Lock className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-black" />
                       <Input
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="ENTER PASSWORD"
-                        className="font-avenir w-full h-[40px] bg-transparent border-0 border-b-2 border-black text-[12px] uppercase placeholder:text-[12px] placeholder:text-black/50 placeholder:font-normal px-0 rounded-none focus-visible:ring-0 focus-visible:border-b-black transition-none shadow-none"
+                        placeholder="Enter Your Password"
+                        className="font-avenir w-full h-[40px] bg-transparent border-0 border-b-2 border-black text-[12px]  placeholder:text-[12px] placeholder:text-black/50 placeholder:font-normal pl-8 pr-12 rounded-none focus-visible:ring-0 focus-visible:border-b-black transition-none shadow-none"
                         {...field}
                       />
                       <button
