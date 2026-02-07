@@ -25,23 +25,28 @@ const LenderTableContainer = ({ accessToken }: LenderTableContainerProps) => {
 
   const debouncedValue = useDebounce(value, 500)
 
-  const { data, isLoading, isError, error } = useQuery<LendersGetResponse>({
-    queryKey: ['lenders', page, debouncedValue, status, dateRange],
-    queryFn: () =>
-      fetch(
-        `${
-          process.env.NEXT_PUBLIC_BACKEND_URL
-        }/api/v1/application?page=${page}&limit=5&search=${debouncedValue}&status=${status}&startDate=${
-          dateRange.from ? dateRange.from : ''
-        }&endDate=${dateRange.to ? dateRange.to : ''}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      ).then((res) => res.json()),
-  })
+ const { data, isLoading, isError, error } = useQuery<LendersGetResponse>({
+  queryKey: ['lenders', page, debouncedValue, status, dateRange],
+  queryFn: () =>
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/application?page=${page}&limit=5&search=${
+        encodeURIComponent(debouncedValue)
+      }&status=${status}&startDate=${
+        dateRange.from ? new Date(dateRange.from).toISOString() : ''
+      }&endDate=${
+        dateRange.to ? new Date(dateRange.to).toISOString() : ''
+      }`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    ).then((res) => {
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    }),
+}); 
 
   let content
 
