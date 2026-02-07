@@ -54,7 +54,7 @@ export default function ListingHeader() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-light tracking-[0.2em]">
+        <h1 className="text-2xl uppercase font-light tracking-[0.2em]">
           Manage Listings
         </h1>
         <Button>
