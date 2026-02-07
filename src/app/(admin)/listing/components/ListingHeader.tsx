@@ -55,7 +55,7 @@ export default function ListingHeader() {
     <div>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl uppercase font-light tracking-[0.2em]">
-          Manage Listings
+          MANAGE LISTINGS
         </h1>
         <Button>
           Download Report <Download className="ml-2 h-4 w-4" />
