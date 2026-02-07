@@ -55,8 +55,8 @@ const CustomersHeader = () => {
     <div>
       {/* Header Title + Button */}
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-light tracking-[.1em]">
-          Manage Customers
+        <h1 className="text-2xl uppercase font-light tracking-[.2em]">
+          MANAGE CUSTOMERS
         </h1>
 
         <Button>

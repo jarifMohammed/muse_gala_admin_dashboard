@@ -52,8 +52,8 @@ export default function HeaderCards() {
     <div className="space-y-8">
       {/* Header Section */}
       <div className="flex items-center justify-start">
-        <h1 className="text-2xl md:text-[32px] font-light tracking-[0.2em]">
-          Chats
+        <h1 className="text-2xl uppercase md:text-[32px] font-light tracking-[0.2em]">
+          CHATS
         </h1>
         {/* <Button disabled={isLoading}>
           Download Report <Download className="ml-2 h-4 w-4" />

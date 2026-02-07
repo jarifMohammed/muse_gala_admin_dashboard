@@ -4,8 +4,8 @@ export default function ContainerHeader() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-start">
-        <h1 className="text-2xl md:text-[32px] font-light tracking-[0.2em]">
-          Manage Team
+        <h1 className="text-2xl uppercase md:text-[32px] font-light tracking-[0.2em]">
+          MANAGE TEAM
         </h1>
       </div>
 

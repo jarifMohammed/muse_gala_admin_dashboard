@@ -68,7 +68,7 @@ export default function OverviewDashboard() {
     <div className="space-y-6 p-6 bg-transparent min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-light tracking-wider">OVERVIEW</h1>
+        <h1 className="text-2xl uppercase tracking-[0.3em] font-light tracking-wider">OVERVIEW</h1>
         <DateFilter onDateChange={handleDateChange} />
       </div>
 

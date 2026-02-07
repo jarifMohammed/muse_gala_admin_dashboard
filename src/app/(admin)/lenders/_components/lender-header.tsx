@@ -5,7 +5,7 @@ const LenderHeader = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl uppercase font-light tracking-[20%]">MANAGE LENDERS</h1>
+        <h1 className="text-2xl uppercase font-light tracking-[0.2em]">MANAGE LENDERS</h1>
       </div>
 
       <div className="mt-[30px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 font-sans">
