@@ -37,18 +37,7 @@ const ProfileTab = ({ data }: Props) => {
           <CardTitle className="font-light font-sans">Actions</CardTitle>
         </CardHeader>
 
-        <CardContent className="font-light text-[12px]">
-          <div className="space-y-6">
-            <div className=" border-b-2 pb-4 flex items-center gap-4">
-              <Button variant="outline">Approve</Button>
-              <Button variant="outline">Suspend</Button>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant={'default'}>Save Changes</Button>
-              
-            </div>
-          </div>
-        </CardContent>
+        
       </Card>
 
       {/* {data.latitude && data.longitude && (
