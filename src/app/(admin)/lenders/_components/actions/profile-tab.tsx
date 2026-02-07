@@ -32,13 +32,7 @@ const ProfileTab = ({ data }: Props) => {
         </CardContent>
       </Card>
 
-      <Card className="shadow-none rounded-[6px] w-full">
-        <CardHeader>
-          <CardTitle className="font-light font-sans">Actions</CardTitle>
-        </CardHeader>
-
-        
-      </Card>
+      
 
       {/* {data.latitude && data.longitude && (
         <Card className="shadow-none rounded-[6px] p-0 ">
