@@ -4,8 +4,7 @@ import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { InfoCard } from '@/components/cards/stat-card'
-import { Button } from '@/components/ui/button'
-import { Download } from 'lucide-react'
+
 
 // Define response types
 type ListingStatsResponse = {
@@ -57,9 +56,7 @@ export default function ListingHeader() {
         <h1 className="text-2xl uppercase font-light tracking-[0.2em]">
           MANAGE LISTINGS
         </h1>
-        <Button>
-          Download Report <Download className="ml-2 h-4 w-4" />
-        </Button>
+        
       </div>
 
       <div className="mt-[30px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-lg">

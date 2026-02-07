@@ -1,8 +1,7 @@
 'use client'
 
 import { InfoCard } from '@/components/cards/stat-card'
-import { Button } from '@/components/ui/button'
-import { Download } from 'lucide-react'
+
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 
@@ -59,9 +58,7 @@ const CustomersHeader = () => {
           MANAGE CUSTOMERS
         </h1>
 
-        <Button>
-          Download Report <Download className="ml-2 h-4 w-4" />
-        </Button>
+        
       </div>
 
       {/* Cards */}

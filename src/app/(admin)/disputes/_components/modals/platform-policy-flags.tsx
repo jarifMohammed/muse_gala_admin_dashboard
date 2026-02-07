@@ -24,7 +24,7 @@ const PlatformPolicyFlags = () => {
         <div className="text-sm flex items-center gap-5">
           <Button>Save Changes</Button>
           <Button variant="outline">Submit Resolution</Button>
-          <Button variant="outline">Download Report</Button>
+          
           <Button variant="outline">Refund</Button>
         </div>
       </div>

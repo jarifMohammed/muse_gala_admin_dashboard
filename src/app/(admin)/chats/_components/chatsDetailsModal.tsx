@@ -10,7 +10,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { File, Download } from 'lucide-react'
+import { File} from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useChatStore } from '@/store/useChatStore'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -162,8 +162,7 @@ export function ChatsDetailsPopup({
             rel="noopener noreferrer"
             className="text-xs text-blue-600 hover:underline flex items-center gap-1"
           >
-            <Download className="h-3 w-3" />
-            Download
+            
           </a>
         </div>
       </div>

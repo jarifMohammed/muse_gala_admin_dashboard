@@ -45,7 +45,7 @@ const ProfileTab = ({ data }: Props) => {
             </div>
             <div className="flex items-center gap-4">
               <Button variant={'default'}>Save Changes</Button>
-              <Button variant={'outline'}>Download Report</Button>
+              
             </div>
           </div>
         </CardContent>

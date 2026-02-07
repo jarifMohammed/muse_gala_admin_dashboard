@@ -224,7 +224,7 @@ export function SupportDetailsPopup({
             <Button onClick={handleSave} disabled={mutation.isPending}>
               {mutation.isPending ? 'Saving...' : 'Save Changes'}
             </Button>
-            <Button variant="secondary">Download Report</Button>
+            
           </CardContent>
         </Card>
       </DialogContent>
