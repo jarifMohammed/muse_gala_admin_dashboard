@@ -27,8 +27,10 @@ import { useQuery } from '@tanstack/react-query'
 // ---- Types ----
 export type Ticket = {
   _id: string
-  user?: { _id: string; email: string } | null
-  lender?: { _id: string; email: string } | null
+  user?: { _id: string; email: string; name?: string } | null
+  lender?: { _id: string; email: string; name?: string } | null
+  name?: string
+  email?: string
   issueType?: string
   createdAt: string
   status: 'pending' | 'resolved' | 'in-progress'
@@ -49,24 +51,52 @@ async function fetchTickets(accessToken: string): Promise<Ticket[]> {
   )
   if (!res.ok) throw new Error('Failed to fetch tickets')
   const json = await res.json()
-  return json.data.contacts
+  return json.data?.contacts || []
 }
 
 // ---- Columns ----
 const columns: ColumnDef<Ticket>[] = [
   {
+    accessorKey: 'name',
+    header: 'Name',
+    cell: ({ row }) => {
+      if (row.original.user) {
+        return row.original.user.name || <span className="text-gray-400">N/A</span>;
+      } else if (row.original.lender) {
+        return row.original.lender.name || <span className="text-gray-400">N/A</span>;
+      } else {
+        // Guest
+        return row.original.name || <span className="text-gray-400">N/A</span>;
+      }
+    },
+  },
+  {
     accessorKey: '_id',
     header: 'Ticket ID',
-    cell: ({ row }) => row.original._id.slice(0, 8),
+    cell: ({ row }) => row.original._id,
   },
   {
     accessorKey: 'user',
     header: 'User ID',
     cell: ({ row }) =>
-      row.original.user?._id.slice(0, 8) ||
-      row.original.lender?._id.slice(0, 8) || (
+      row.original.user?._id ||
+      row.original.lender?._id || (
         <span className="text-gray-400">Guest</span>
       ),
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email',
+    cell: ({ row }) => {
+      if (row.original.user) {
+        return row.original.user.email || <span className="text-gray-400">N/A</span>;
+      } else if (row.original.lender) {
+        return row.original.lender.email || <span className="text-gray-400">N/A</span>;
+      } else {
+        // Guest
+        return row.original.email || <span className="text-gray-400">N/A</span>;
+      }
+    },
   },
   {
     accessorKey: 'issueType',
@@ -86,37 +116,18 @@ const columns: ColumnDef<Ticket>[] = [
   {
     accessorKey: 'status',
     header: 'Status',
-    cell: ({ row }) => (
-      <span
-        className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
-          row.original.status === 'pending'
-            ? 'bg-yellow-100 text-yellow-700'
-            : row.original.status === 'resolved'
-            ? 'bg-green-100 text-green-700'
-            : 'bg-blue-100 text-blue-700'
-        }`}
-      >
-        {row.original.status}
-      </span>
-    ),
+    cell: ({ row }) => {
+      let statusClass = 'bg-blue-100 text-blue-700';
+      if (row.original.status === 'pending') statusClass = 'bg-yellow-100 text-yellow-700';
+      else if (row.original.status === 'resolved') statusClass = 'bg-green-100 text-green-700';
+      return (
+        <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${statusClass}`}>
+          {row.original.status}
+        </span>
+      );
+    },
   },
-  {
-    accessorKey: 'priority',
-    header: 'Priority',
-    cell: ({ row }) => (
-      <span
-        className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
-          row.original.priority === 'high'
-            ? 'bg-red-100 text-red-700'
-            : row.original.priority === 'medium'
-            ? 'bg-blue-100 text-blue-700'
-            : 'bg-green-100 text-green-700'
-        }`}
-      >
-        {row.original.priority}
-      </span>
-    ),
-  },
+  // priority column removed
   {
     id: 'actions',
     header: 'Action',
@@ -137,7 +148,12 @@ const columns: ColumnDef<Ticket>[] = [
 ]
 
 // ---- Main Component ----
-export default function SupportTable() {
+
+interface SupportTableProps {
+  initialData?: Ticket[]
+}
+
+export default function SupportTable({ initialData }: SupportTableProps = {}) {
   const [search, setSearch] = useState('')
   const [issueFilter, setIssueFilter] = useState<string>('all')
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 })
@@ -150,7 +166,7 @@ export default function SupportTable() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['tickets', accessToken],
     queryFn: () => fetchTickets(accessToken),
-    enabled: !!accessToken,
+    enabled: !!accessToken && !initialData,
   })
 
   // reset to first page when search/filter changes
@@ -160,8 +176,8 @@ export default function SupportTable() {
 
   // ---- Filtering ----
   const filteredData = useMemo(() => {
-    if (!data) return []
-    return data.filter((item) => {
+    const baseData = initialData || data || []
+    return baseData.filter((item) => {
       const matchesSearch = JSON.stringify(item)
         .toLowerCase()
         .includes(search.toLowerCase())
@@ -169,7 +185,7 @@ export default function SupportTable() {
         issueFilter === 'all' ? true : item.issueType === issueFilter
       return matchesSearch && matchesIssue
     })
-  }, [data, search, issueFilter])
+  }, [initialData, data, search, issueFilter])
 
   // ---- Table ----
   const table = useReactTable({
@@ -226,20 +242,22 @@ export default function SupportTable() {
                 <th className="p-2 text-center text-gray-500">Issue Type</th>
                 <th className="p-2 text-center text-gray-500">Date</th>
                 <th className="p-2 text-center text-gray-500">Status</th>
-                <th className="p-2 text-center text-gray-500">Priority</th>
                 <th className="p-2 text-center text-gray-500">Action</th>
               </tr>
             </thead>
             <tbody>
-              {[...Array(5)].map((_, i) => (
-                <tr key={i} className="border-t">
-                  {[...Array(7)].map((_, j) => (
-                    <td key={j} className="p-2 text-center">
-                      <Skeleton className="h-5 w-24 mx-auto" />
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              {Array.from({ length: 5 }).map((_, i) => {
+                const rowKey = `skeleton-row-${Math.random().toString(36).substr(2, 9)}`;
+                return (
+                  <tr key={rowKey} className="border-t">
+                    {Array.from({ length: 6 }).map((_, j) => (
+                      <td key={`skeleton-cell-${rowKey}-${j}`} className="p-2 text-center">
+                        <Skeleton className="h-5 w-24 mx-auto" />
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

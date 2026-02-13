@@ -33,8 +33,9 @@ const routes = [
   // { id: 9, label: 'Analytics', href: '/analytics' },
   { id: 10, label: 'Content & CMS', href: '/content-&-cms' },
   { id: 11, label: 'Support', href: '/support' },
-  { id: 12, label: 'Team', href: '/team' },
-  { id: 13, label: 'Settings', href: '/settings' },
+  { id: 12, label: 'Newsletter Subscriptions', href: '/newsletter-subscriptions' },
+  { id: 13, label: 'Team', href: '/team' },
+  { id: 14, label: 'Settings', href: '/settings' },
 ]
 
 export default function Sidebar({ session }: any) {
@@ -69,9 +70,9 @@ export default function Sidebar({ session }: any) {
     allowedRoutes = hasAllAccess
       ? routes
       : [
-          overview!, // force overview always
-          ...routes.filter(r => allowedPathSet.has(r.href)),
-        ]
+        overview!, // force overview always
+        ...routes.filter(r => allowedPathSet.has(r.href)),
+      ]
   }
 
   return (
@@ -100,11 +101,10 @@ export default function Sidebar({ session }: any) {
                   <Link
                     href={route.href}
                     className={`flex text-white/80 items-center gap-3 rounded-md px-3 font-light py-2 
-                    ${
-                      isActive
+                    ${isActive
                         ? 'bg-white/20 text-primary-foreground'
                         : 'hover:bg-white/10 hover:text-white/70'
-                    }`}
+                      }`}
                   >
                     <span>{route.label}</span>
                   </Link>

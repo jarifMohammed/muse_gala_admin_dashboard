@@ -79,12 +79,9 @@ export default function HeaderCards() {
       )}
 
       {stats && (
-        <div className="mt-[30px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-lg">
+        <div className="mt-[30px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-lg">
           {/* Open tickets */}
           <InfoCard title="Open Tickets" value={stats.open.toString()} />
-
-          {/* Ticket Volume */}
-          <InfoCard title="Ticket Volume" value={`${stats.total} this week`} />
 
           {/* Top Issue Types */}
           <Card className="hover:bg-black hover:text-white hover:scale-105 transition-all duration-500 ease-in-out">

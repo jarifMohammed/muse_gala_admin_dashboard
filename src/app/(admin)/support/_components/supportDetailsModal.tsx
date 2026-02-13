@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
+// import { Textarea } from '@/components/ui/textarea'
 import { useState } from 'react'
 import Image from 'next/image'
 import { Ticket } from './supportTable'
@@ -25,10 +25,11 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 
 // ---- PATCH API ----
+// Integrate new PATCH API route for updating status
 async function updateSupportTicket(
   id: string,
   accessToken: string,
-  payload: { response: string; status: string; priority: string }
+  payload: { status: string }
 ) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/support/${id}`,
@@ -53,23 +54,19 @@ export function SupportDetailsPopup({
 }: {
   id: string
   children: React.ReactNode
-  data: Ticket
+  data: Ticket & { file?: string | string[] }
 }) {
   const session = useSession()
   const accessToken = session.data?.user?.accessToken || ''
   const queryClient = useQueryClient()
 
   const [status, setStatus] = useState(data.status)
-  const [priority, setPriority] = useState(data.priority)
-  const [response, setResponse] = useState('')
+  // Removed priority state
+  // Removed response state
 
   // --- useMutation ---
   const mutation = useMutation({
-    mutationFn: (payload: {
-      response: string
-      status: string
-      priority: string
-    }) => updateSupportTicket(id, accessToken, payload),
+    mutationFn: (payload: { status: string }) => updateSupportTicket(id, accessToken, payload),
     onSuccess: () => {
       // cache refresh
       queryClient.invalidateQueries({
@@ -86,7 +83,7 @@ export function SupportDetailsPopup({
   })
 
   const handleSave = () => {
-    mutation.mutate({ response, status, priority })
+    mutation.mutate({ status: status.toLowerCase() })
   }
 
   return (
@@ -98,7 +95,7 @@ export function SupportDetailsPopup({
         <DialogHeader>
           <div className="flex justify-center mb-7 mt-6">
             <Image
-              src="/logo.png"
+              src="/logo.svg"
               alt="Support Ticket"
               width={100}
               height={100}
@@ -107,14 +104,9 @@ export function SupportDetailsPopup({
               quality={100}
             />
           </div>
-          <div className="flex justify-start">
-            <span className="text-lg font-light tracking-wider">
-              <strong className="font-medium">Transaction Details:</strong> {id}
-            </span>
-          </div>
         </DialogHeader>
 
-        {/* Ticket Summary */}
+        {/* Ticket Summary (priority removed) */}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg font-light tracking-wider">
@@ -125,19 +117,74 @@ export function SupportDetailsPopup({
             <p>
               <strong className="font-medium">Ticket ID:</strong> {id}
             </p>
-            <p>
-              <strong className="font-medium">User ID:</strong>{' '}
-              {data?.user?._id || 'Guest'}
-            </p>
+            {/* Extracted user/lender/guest info */}
+            {(() => {
+              if (data?.user) {
+                return (
+                  <>
+                    <p>
+                      <strong className="font-medium">User ID:</strong>{' '}
+                      {data.user._id}
+                    </p>
+                    <p>
+                      <strong className="font-medium">Email:</strong>{' '}
+                      {data.user.email}
+                    </p>
+                    {typeof data.user === 'object' && 'name' in data.user && data.user.name ? (
+                      <p>
+                        <strong className="font-medium">Name:</strong>{' '}
+                        {data.user.name}
+                      </p>
+                    ) : null}
+                  </>
+                )
+              } else if (data?.lender) {
+                return (
+                  <>
+                    <p>
+                      <strong className="font-medium">Lender ID:</strong>{' '}
+                      {data.lender._id}
+                    </p>
+                    <p>
+                      <strong className="font-medium">Email:</strong>{' '}
+                      {data.lender.email}
+                    </p>
+                    {typeof data.lender === 'object' && 'name' in data.lender && data.lender.name ? (
+                      <p>
+                        <strong className="font-medium">Name:</strong>{' '}
+                        {typeof data.lender.name === 'string' ? data.lender.name : JSON.stringify(data.lender.name)}
+                      </p>
+                    ) : null}
+                  </>
+                )
+              } else {
+                return (
+                  <>
+                    <p>
+                      <strong className="font-medium">User:</strong> Guest
+                    </p>
+                    {data.name && (
+                      <p>
+                        <strong className="font-medium">Name:</strong>{' '}
+                        {data.name}
+                      </p>
+                    )}
+                    {typeof data.email === 'string' && (
+                      <p>
+                        <strong className="font-medium">Email:</strong>{' '}
+                        {data.email}
+                      </p>
+                    )}
+                  </>
+                )
+              }
+            })()}
             <p>
               <strong className="font-medium">Issue Type:</strong>{' '}
               {data?.issueType || 'N/A'}
             </p>
             <p>
               <strong className="font-medium">Status:</strong> {status}
-            </p>
-            <p>
-              <strong className="font-medium">Priority:</strong> {priority}
             </p>
             <p>
               <strong className="font-medium">Created Date:</strong>{' '}
@@ -151,25 +198,30 @@ export function SupportDetailsPopup({
               <strong className="font-medium">Description:</strong>{' '}
               {data?.message || 'N/A'}
             </p>
+            {/* File Preview Section */}
+            {data?.file && (
+              <div className="mt-4">
+                <strong className="font-medium">Attachment:</strong>
+                {(Array.isArray(data.file) ? data.file : [data.file]).map((fileUrl, idx) => (
+                  <a
+                    key={fileUrl + idx}
+                    href={fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block border rounded p-1 mt-2 hover:shadow"
+                    style={{ display: 'inline-block', marginRight: 8 }}
+                  >
+                    <img src={fileUrl} alt={`attachment-${idx}`} className="max-h-32 max-w-xs object-contain" />
+                  </a>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
-        {/* Communication */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Communication</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Textarea
-              value={response}
-              onChange={(e) => setResponse(e.target.value)}
-              placeholder="Write response text..."
-              rows={10}
-            />
-          </CardContent>
-        </Card>
+        {/* Communication section removed */}
 
-        {/* Update Actions */}
+        {/* Update Actions (priority field removed) */}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Update Actions</CardTitle>
@@ -193,25 +245,6 @@ export function SupportDetailsPopup({
                 </SelectContent>
               </Select>
             </div>
-
-            <div className="space-y-2">
-              <Label>Update Priority</Label>
-              <Select
-                value={priority}
-                onValueChange={(value) =>
-                  setPriority(value as 'low' | 'medium' | 'high')
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
           </CardContent>
         </Card>
 
@@ -224,7 +257,7 @@ export function SupportDetailsPopup({
             <Button onClick={handleSave} disabled={mutation.isPending}>
               {mutation.isPending ? 'Saving...' : 'Save Changes'}
             </Button>
-            
+
           </CardContent>
         </Card>
       </DialogContent>
