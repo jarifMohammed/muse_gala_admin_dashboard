@@ -211,7 +211,14 @@ export function SupportDetailsPopup({
                     className="block border rounded p-1 mt-2 hover:shadow"
                     style={{ display: 'inline-block', marginRight: 8 }}
                   >
-                    <img src={fileUrl} alt={`attachment-${idx}`} className="max-h-32 max-w-xs object-contain" />
+                    <div className="relative h-32 w-full max-w-xs">
+                      <Image
+                        src={fileUrl}
+                        alt={`attachment-${idx}`}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
                   </a>
                 ))}
               </div>

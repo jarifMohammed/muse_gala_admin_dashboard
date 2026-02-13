@@ -246,7 +246,7 @@ export default function SupportTable({ initialData }: SupportTableProps = {}) {
               </tr>
             </thead>
             <tbody>
-              {Array.from({ length: 5 }).map((_, i) => {
+              {Array.from({ length: 5 }).map(() => {
                 const rowKey = `skeleton-row-${Math.random().toString(36).substr(2, 9)}`;
                 return (
                   <tr key={rowKey} className="border-t">
