@@ -25,7 +25,7 @@ const MrrStates = ({ mrrData }: { mrrData: MrrData }) => {
           New Sign-ups
         </button>
         <p className="font-medium text-2xl mt-5 font-serif">
-          $ {mrrData?.totalNewSignUps}
+          {mrrData?.totalNewSignUps}
         </p>
       </div>
 
@@ -34,7 +34,7 @@ const MrrStates = ({ mrrData }: { mrrData: MrrData }) => {
           Churned Users
         </button>
         <p className="font-medium text-2xl mt-5 font-serif">
-          $ {mrrData?.totalCancelledSubscribers}
+          {mrrData?.totalCancelledSubscribers}
         </p>
       </div>
 
