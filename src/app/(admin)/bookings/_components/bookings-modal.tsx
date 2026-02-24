@@ -4,7 +4,6 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Image from "next/image";
 import React from "react";
 import BookingSummery from "./modals/booking-summery";
-import BookingStatus from "./modals/booking-status";
 import { useModalStore } from "@/state/ModalState/useModalStore";
 import BookingCustomer from "./modals/booking-customer";
 import BookingLender from "./modals/booking-lender";
@@ -44,7 +43,7 @@ export interface Booking {
   shippingFee: number;
   insuranceFee: number;
   totalAmount: number;
-  deliveryStatus: "Pending" | "Shipped" | "Delivered" | "Returned";
+  deliveryStatus: "Pending" | "Shipped" | "Delivered" | "Returned" | "CancelledByCustomer";
   paymentStatus: "Pending" | "Paid" | "Failed";
   payoutStatus: "pending" | "paid" | "failed";
   tryOnRequested: boolean;
@@ -55,6 +54,46 @@ export interface Booking {
   lenderNotes: string;
   adminNotes: string;
   statusHistory: StatusHistory[];
+  stripePaymentIntentId?: string;
+  payouts?: Array<{
+    bookingAmount: number;
+    lenderPrice: number;
+    adminsProfit: number;
+    requestedAmount: number;
+    commission: number;
+    status: string;
+    requestedAt: string;
+    _id: string;
+  }>;
+  disputes?: Array<{
+    _id: string;
+    booking: string;
+    createdBy: string;
+    issueType: string;
+    description: string;
+    evidence: string[];
+    status: string;
+    timeline: Array<{
+      actor: string;
+      role: string;
+      message: string;
+      attachments: Array<{ filename: string; url: string }>;
+      type: string;
+      timestamp: string;
+    }>;
+    isEscalated: boolean;
+    escalationConfirmed: boolean;
+    escalationScheduleCall: boolean;
+    policyFlags: string[];
+    refundProcessed: boolean;
+    escalationEvidence: Array<{ filename: string; url: string }>;
+    createdAt: string;
+    updatedAt: string;
+    escalatedAt?: string;
+    escalationDescription?: string;
+    escalationPriority?: string;
+    escalationReason?: string;
+  }>;
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -84,7 +123,6 @@ const BookingsModal = ({ isOpen, setIsOpen, id }: Props) => {
 
   const levels = [
     { label: "Summary" },
-    { label: "Status" },
     { label: "Customer" },
     { label: "Lender" },
     { label: "Payment" },
@@ -125,11 +163,10 @@ const BookingsModal = ({ isOpen, setIsOpen, id }: Props) => {
             {levels.map((item, index) => (
               <button
                 onClick={() => setIsBookingModalOpen(item.label)}
-                className={`pb-1 px-5 ${
-                  isBookingModalOpen === item.label
-                    ? "border-b-2 border-black"
-                    : ""
-                }`}
+                className={`pb-1 px-5 ${isBookingModalOpen === item.label
+                  ? "border-b-2 border-black"
+                  : ""
+                  }`}
                 key={index}
               >
                 {item.label}
@@ -141,17 +178,18 @@ const BookingsModal = ({ isOpen, setIsOpen, id }: Props) => {
             {isBookingModalOpen === "Summary" && (
               <BookingSummery bookingDetails={bookingDetails as Booking} />
             )}
-            {isBookingModalOpen === "Status" && (
-              <BookingStatus bookingDetails={bookingDetails as Booking} />
-            )}
             {isBookingModalOpen === "Customer" && (
               <BookingCustomer bookingDetails={bookingDetails as Booking} />
             )}
             {isBookingModalOpen === "Lender" && (
               <BookingLender bookingDetails={bookingDetails as Booking} />
             )}
-            {isBookingModalOpen === "Payment" && <BookingPayment />}
-            {isBookingModalOpen === "Disputes" && <BookingDisputes />}
+            {isBookingModalOpen === "Payment" && (
+              <BookingPayment bookingDetails={bookingDetails as Booking} />
+            )}
+            {isBookingModalOpen === "Disputes" && (
+              <BookingDisputes bookingDetails={bookingDetails as Booking} />
+            )}
             {/* {isBookingModalOpen === "Notes" && <BookingNotes />} */}
             {isBookingModalOpen === "Timeline" && <BookingTimeline />}
           </div>

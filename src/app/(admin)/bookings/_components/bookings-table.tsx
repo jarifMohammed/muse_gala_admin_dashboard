@@ -25,6 +25,7 @@ export interface BookingItem {
   totalAmount: number;
   deliveryStatus: string;
   paymentStatus: string;
+  payoutStatus: string;
   statusHistory: Array<{
     status: string;
     timestamp: string;
@@ -76,11 +77,10 @@ const BookingsTable = ({
             <TableRow className="border-none text-base">
               <TableHead className="text-center">Booking ID</TableHead>
               <TableHead className="text-center">Customer ID</TableHead>
-              <TableHead className="text-center">Lender ID</TableHead>
               <TableHead className="text-center">Dress ID</TableHead>
               <TableHead className="text-center">Booking Date</TableHead>
-              <TableHead className="text-center">Amount</TableHead>
-              <TableHead className="text-center">Status</TableHead>
+              <TableHead className="text-center text-nowrap">Amount</TableHead>
+              <TableHead className="text-center text-nowrap">Status</TableHead>
               <TableHead className="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -89,7 +89,7 @@ const BookingsTable = ({
             {isLoading || isFetching ? (
               Array.from({ length: 10 }).map((_, i) => (
                 <TableRow key={i}>
-                  {Array.from({ length: 8 }).map((_, j) => (
+                  {Array.from({ length: 7 }).map((_, j) => (
                     <TableCell key={j} className="text-center">
                       <Skeleton className="h-5 w-20 mx-auto" />
                     </TableCell>
@@ -104,32 +104,27 @@ const BookingsTable = ({
                     {item?.customer || "N/A"}
                   </TableCell>
                   <TableCell className="text-center">
-                    {item?.listing || "N/A"}{" "}
-                  </TableCell>
-                  <TableCell className="text-center">
                     {item?.masterdressId}
                   </TableCell>
                   <TableCell className="text-center">
-                    {new Date(item?.createdAt).toLocaleDateString()}
+                    {item?.createdAt ? new Date(item.createdAt).toLocaleDateString() : "N/A"}
                   </TableCell>
                   <TableCell className="text-center">
                     {`$ ${item?.totalAmount}`}
                   </TableCell>
-                  <TableCell className="text-center space-x-1">
-                    {item?.statusHistory?.map((status) => (
-                      <span
-                        key={status?._id}
-                        className={`px-2 rounded-3xl font-semibold text-xs py-1 ${
-                          status?.status === "Delivered" &&
-                          "text-green-600 bg-green-200"
-                        } ${
-                          status?.status === "Pending" &&
-                          "text-orange-600 bg-orange-200"
+                  <TableCell className="text-center">
+                    <span
+                      className={`px-3 rounded-3xl font-semibold text-xs py-1 tracking-wider ${item?.deliveryStatus === "Delivered"
+                        ? "text-green-600 bg-green-100"
+                        : item?.deliveryStatus === "Pending"
+                          ? "text-orange-600 bg-orange-100"
+                          : item?.deliveryStatus === "CancelledByCustomer"
+                            ? "text-red-600 bg-red-100"
+                            : "text-slate-600 bg-slate-100"
                         }`}
-                      >
-                        {status?.status}
-                      </span>
-                    ))}
+                    >
+                      {item?.deliveryStatus || "N/A"}
+                    </span>
                   </TableCell>
                   <TableCell className="text-center">
                     <Button onClick={() => handleBookings(item?._id)}>
@@ -141,7 +136,7 @@ const BookingsTable = ({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={8}
+                  colSpan={7}
                   className="text-center py-6 text-gray-500"
                 >
                   No bookings found

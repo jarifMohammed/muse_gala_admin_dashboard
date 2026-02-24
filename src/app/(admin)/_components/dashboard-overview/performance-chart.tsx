@@ -52,7 +52,7 @@ export function PerformanceCharts({
   bookingData,
   loading,
 }: PerformanceChartsProps) {
-  const maxRevenue = Math.max(...revenueData.map(d => d.value), 1)
+  const maxRevenue = Math.max(...revenueData.map(d => d.value), 0)
 
   const chartDisputeData = [
     { name: 'Pending', value: disputeData.pending },
@@ -63,7 +63,7 @@ export function PerformanceCharts({
   const chartBookingData = [
     { name: 'Active', value: bookingData.active },
     { name: 'Completed', value: bookingData.completed },
-    { name: 'Cancel', value: bookingData.cancelledOrPending },
+    { name: 'Pending', value: bookingData.cancelledOrPending },
   ]
 
   if (loading) {
@@ -100,9 +100,11 @@ export function PerformanceCharts({
               <h3 className="text-base font-normal tracking-wider text-gray-600">
                 Revenue Trend
               </h3>
-              <span className="text-base font-normal tracking-wider text-gray-600">
-                ${maxRevenue.toLocaleString()}
-              </span>
+              {maxRevenue > 0 && (
+                <span className="text-base font-normal tracking-wider text-gray-600">
+                  ${maxRevenue.toLocaleString()}
+                </span>
+              )}
             </div>
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={revenueData}>
@@ -186,9 +188,6 @@ export function PerformanceCharts({
               <h3 className="text-base font-normal tracking-wider text-gray-600">
                 Booking Volume
               </h3>
-              <span className="text-base font-normal tracking-wider text-gray-600">
-                ${maxRevenue.toLocaleString()}
-              </span>
             </div>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={chartBookingData}>

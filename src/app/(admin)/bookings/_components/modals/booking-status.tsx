@@ -10,17 +10,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import React from "react";
 
-type Status = {
-  _id: string;
-  status: string;
-};
-
 type BookingDetails = {
-  statusHistory: Status[];
+  deliveryStatus?: string;
   updatedAt?: string;
 };
 
-const BookingStatus = ({ bookingDetails = { statusHistory: [] } }: { bookingDetails?: BookingDetails }) => {
+const BookingStatus = ({ bookingDetails }: { bookingDetails?: BookingDetails }) => {
   return (
     <div className="mt-5">
       <div className="border border-gray-200 p-5 rounded-lg shadow-sm">
@@ -29,18 +24,14 @@ const BookingStatus = ({ bookingDetails = { statusHistory: [] } }: { bookingDeta
         <div className="text-sm space-y-2">
           <h3 className="flex items-center gap-1">
             <span>Current Status: </span>
-            <h3>
-              {bookingDetails.statusHistory.map((status) => (
-                <span
-                  key={status._id}
-                  className={`${
-                    status.status === "Pending" && "text-orange-600"
-                  }`}
-                >
-                  {status.status}
-                </span>
-              ))}
-            </h3>
+            <span
+              className={`${bookingDetails?.deliveryStatus === "Pending" && "text-orange-600"
+                } ${bookingDetails?.deliveryStatus === "Delivered" && "text-green-600"
+                } ${bookingDetails?.deliveryStatus === "CancelledByCustomer" && "text-red-600"
+                }`}
+            >
+              {bookingDetails?.deliveryStatus || "N/A"}
+            </span>
           </h3>
           <h3>Last Updated: {new Date(bookingDetails?.updatedAt ?? "").toLocaleDateString()}</h3>
         </div>

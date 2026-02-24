@@ -14,7 +14,7 @@ const BookingSummery = ({ bookingDetails }: { bookingDetails?: Booking }) => {
           </h3>
           <h3>
             Lender Name: {bookingDetails?.allocatedLender?.lenderId?.firstName}{" "}
-             {bookingDetails?.allocatedLender?.lenderId?.lastName}
+            {bookingDetails?.allocatedLender?.lenderId?.lastName}
           </h3>
           <h3>Dress Name: {bookingDetails?.dressName}</h3>
           {bookingDetails?.createdAt && (
@@ -25,16 +25,14 @@ const BookingSummery = ({ bookingDetails }: { bookingDetails?: Booking }) => {
           )}
           <h3>
             <span>Status: </span>
-            {bookingDetails?.statusHistory?.map((status) => (
-              <span
-                key={status?._id}
-                className={`${
-                  status?.status === "Pending" && "text-orange-600"
+            <span
+              className={`${bookingDetails?.deliveryStatus === "Pending" && "text-orange-600"
+                } ${bookingDetails?.deliveryStatus === "Delivered" && "text-green-600"
+                } ${bookingDetails?.deliveryStatus === "CancelledByCustomer" && "text-red-600"
                 }`}
-              >
-                {status?.status}
-              </span>
-            ))}
+            >
+              {bookingDetails?.deliveryStatus || "N/A"}
+            </span>
           </h3>
           <h3>Amount: $ {bookingDetails?.totalAmount}</h3>
         </div>

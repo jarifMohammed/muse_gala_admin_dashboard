@@ -46,6 +46,13 @@ export interface TopDress {
   lenderEmail: string
 }
 
+export interface LenderStats {
+  totalLenders: number
+  activeLenders: number
+  pendingApplications: number
+  approvedLenders: number
+}
+
 // Fetch Dashboard Stats
 export const useGetDashboardStats = (
   accessToken: string,
@@ -142,6 +149,24 @@ export const useGetTopDresses = (
         },
       )
       if (!res.ok) throw new Error('Failed to fetch top dresses')
+      return res.json()
+    },
+    enabled: !!accessToken,
+  })
+}
+
+// Fetch Lender Stats
+export const useGetLenderStats = (accessToken: string) => {
+  return useQuery({
+    queryKey: ['lender-stats'],
+    queryFn: async () => {
+      const res = await fetch(
+        `${API_BASE_URL}/api/v1/admin/overview/lender-stats`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+      )
+      if (!res.ok) throw new Error('Failed to fetch lender stats')
       return res.json()
     },
     enabled: !!accessToken,

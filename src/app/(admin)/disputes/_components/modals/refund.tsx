@@ -81,7 +81,7 @@ const Refund = () => {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || "Refund failed");
+      throw new Error(error.message || error.error || "Refund failed");
     }
 
     return response.json();
@@ -95,14 +95,19 @@ const Refund = () => {
       setFormError("");
     },
     onError: (error: Error) => {
-      setFormError(error.message);
-      toast.error(error.message || "Failed to process refund");
+      const isUnpaidError = error.message.includes("payment_intent or charge");
+      const displayMessage = isUnpaidError
+        ? "This booking is not paid yet refund not possible"
+        : error.message;
+
+      setFormError(displayMessage);
+      toast.error(displayMessage);
     },
   });
 
   const onSubmit = (data: FormData) => {
     setFormError("");
-    
+
     if (!data.refundType) {
       form.setError("refundType", {
         type: "manual",
@@ -127,7 +132,7 @@ const Refund = () => {
         return;
       }
     }
-    
+
     mutation.mutate(data);
   };
 
@@ -163,8 +168,8 @@ const Refund = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Refund Type *</FormLabel>
-                <Select 
-                  onValueChange={field.onChange} 
+                <Select
+                  onValueChange={field.onChange}
                   value={field.value}
                 >
                   <SelectTrigger>
@@ -220,8 +225,8 @@ const Refund = () => {
             )}
           />
 
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={mutation.isPending}
             className="w-full"
           >

@@ -8,6 +8,8 @@ import DisputesDetails from "./modals/disputes-details";
 import PlatformPolicyFlags from "./modals/platform-policy-flags";
 import { useQuery } from "@tanstack/react-query";
 import Refund from "./modals/refund";
+import ResolutionPanel from "./modals/resolution-panel";
+import ChargeDispute from "./modals/charge-dispute";
 
 interface DisputesModalProps {
   id: string | null;
@@ -45,6 +47,7 @@ const DisputesModal = ({ id, token, isOpen, onClose }: DisputesModalProps) => {
     { label: "Platform Policy Flags" },
     { label: "Resolution Panel" },
     { label: "Refund" },
+    { label: "Charge" },
   ];
 
   // Close modal on Escape key press
@@ -119,11 +122,10 @@ const DisputesModal = ({ id, token, isOpen, onClose }: DisputesModalProps) => {
                 <button
                   key={index}
                   onClick={() => setActiveTab(item.label)}
-                  className={`pb-4 px-6 font-medium text-sm transition-colors duration-200 relative ${
-                    activeTab === item.label
-                      ? "text-gray-900"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
+                  className={`pb-4 px-6 font-medium text-sm transition-colors duration-200 relative ${activeTab === item.label
+                    ? "text-gray-900"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
                 >
                   {item.label}
                   {activeTab === item.label && (
@@ -148,18 +150,16 @@ const DisputesModal = ({ id, token, isOpen, onClose }: DisputesModalProps) => {
                 isLoading={isLoading}
               />
             )}
-            {activeTab === "Platform Policy Flags" && <PlatformPolicyFlags />}
+            {activeTab === "Platform Policy Flags" && (
+              <PlatformPolicyFlags disputeId={id} token={token} />
+            )}
             {activeTab === "Resolution Panel" && (
-              <div className="text-center py-12">
-                <div className="text-gray-500 text-lg">
-                  Resolution Panel Content
-                </div>
-                <p className="text-gray-400 mt-2">
-                  This section is under development
-                </p>
-              </div>
+              <ResolutionPanel disputeId={id} token={token} />
             )}
             {activeTab === "Refund" && <Refund />}
+            {activeTab === "Charge" && (
+              <ChargeDispute disputeId={id} token={token} />
+            )}
           </div>
         </div>
       </div>
