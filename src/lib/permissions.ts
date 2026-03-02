@@ -6,6 +6,7 @@ export const PERMISSION_MAP: Record<string, string[]> = {
   'Customers Management': ['/customers'],
 
   'Bookings Management': ['/bookings'],
+  'Returns Management': ['/returns'],
   'Disputes Management': ['/disputes'],
   'Finance Management': ['/finance'],
   'Chats Management': ['/chats'],

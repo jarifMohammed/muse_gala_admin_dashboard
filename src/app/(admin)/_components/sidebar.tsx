@@ -27,6 +27,7 @@ const routes = [
   { id: 3, label: 'Lenders', href: '/lenders' },
   { id: 4, label: 'Customers', href: '/customers' },
   { id: 5, label: 'Bookings', href: '/bookings' },
+  { id: 15, label: 'Returns', href: '/returns' },
   { id: 6, label: 'Disputes', href: '/disputes' },
   { id: 7, label: 'Finance', href: '/finance' },
   { id: 8, label: 'Chats', href: '/chats' },

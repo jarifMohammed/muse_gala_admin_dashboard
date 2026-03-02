@@ -6,6 +6,7 @@ import PayoutSummery from "./payout-summery";
 import MRR from "./MRR";
 import CreditPromotions from "./credit-promotions";
 import RevenueBreakdown from "./revenue-breakdown";
+import RefundAnalytics from "./refund-analytics/RefundAnalytics";
 import { RevenueBreakdownType } from "./finance-header";
 
 const tabs = [
@@ -48,15 +49,14 @@ const FinanceTabs = ({
 
   return (
     <div className="space-y-8">
-      <div className="bg-white shadow-[0px_4px_10px_0px_#0000001A] p-5 rounded-md space-x-8">
+      <div className="bg-white shadow-[0px_4px_10px_0px_#0000001A] p-5 rounded-md space-x-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
         {tabs.map((tab) => (
           <Button
             key={tab.id}
-            className={`${
-              isActive === tab.label
+            className={`${isActive === tab.label
                 ? "bg-primary"
                 : "bg-inherit border border-black text-black hover:bg-inherit hover:text-black"
-            }`}
+              }`}
             onClick={() => setIsActive(tab.label)}
           >
             {tab.label}
@@ -80,6 +80,9 @@ const FinanceTabs = ({
             revenueBreakdown={revenueBreakdown}
             isLoading={isLoading}
           />
+        )}
+        {isActive === "Refunds & Losses" && (
+          <RefundAnalytics token={token as string} />
         )}
       </div>
     </div>

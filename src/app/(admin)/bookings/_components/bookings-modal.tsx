@@ -116,6 +116,9 @@ interface Lender {
 interface StatusHistory {
   _id: string;
   status: string;
+  timestamp: string;
+  updatedBy: string;
+  reason?: string;
 }
 
 const BookingsModal = ({ isOpen, setIsOpen, id }: Props) => {
@@ -131,7 +134,7 @@ const BookingsModal = ({ isOpen, setIsOpen, id }: Props) => {
     { label: "Timeline" },
   ];
 
-  const { data: bookingDetails = {} } = useQuery<Booking>({
+  const { data: bookingDetails } = useQuery<Booking>({
     queryKey: ["bookings-details", id],
     queryFn: async () => {
       const res = await fetch(
@@ -145,8 +148,8 @@ const BookingsModal = ({ isOpen, setIsOpen, id }: Props) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-5xl p-10">
-        <div className="overflow-auto scrollbar-hide">
+      <DialogContent className="sm:max-w-5xl p-10 max-h-[90vh] flex flex-col">
+        <div className="overflow-y-auto pr-2 custom-scrollbar">
           <div>
             <Image
               src={"/logo.png"}
@@ -175,23 +178,33 @@ const BookingsModal = ({ isOpen, setIsOpen, id }: Props) => {
           </div>
 
           <div>
-            {isBookingModalOpen === "Summary" && (
-              <BookingSummery bookingDetails={bookingDetails as Booking} />
+            {!bookingDetails ? (
+              <div className="flex items-center justify-center p-20">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+              </div>
+            ) : (
+              <>
+                {isBookingModalOpen === "Summary" && (
+                  <BookingSummery bookingDetails={bookingDetails as Booking} />
+                )}
+                {isBookingModalOpen === "Customer" && (
+                  <BookingCustomer bookingDetails={bookingDetails as Booking} />
+                )}
+                {isBookingModalOpen === "Lender" && (
+                  <BookingLender bookingDetails={bookingDetails as Booking} />
+                )}
+                {isBookingModalOpen === "Payment" && (
+                  <BookingPayment bookingDetails={bookingDetails as Booking} />
+                )}
+                {isBookingModalOpen === "Disputes" && (
+                  <BookingDisputes bookingDetails={bookingDetails as Booking} />
+                )}
+                {/* {isBookingModalOpen === "Notes" && <BookingNotes />} */}
+                {isBookingModalOpen === "Timeline" && (
+                  <BookingTimeline statusHistory={bookingDetails?.statusHistory || []} />
+                )}
+              </>
             )}
-            {isBookingModalOpen === "Customer" && (
-              <BookingCustomer bookingDetails={bookingDetails as Booking} />
-            )}
-            {isBookingModalOpen === "Lender" && (
-              <BookingLender bookingDetails={bookingDetails as Booking} />
-            )}
-            {isBookingModalOpen === "Payment" && (
-              <BookingPayment bookingDetails={bookingDetails as Booking} />
-            )}
-            {isBookingModalOpen === "Disputes" && (
-              <BookingDisputes bookingDetails={bookingDetails as Booking} />
-            )}
-            {/* {isBookingModalOpen === "Notes" && <BookingNotes />} */}
-            {isBookingModalOpen === "Timeline" && <BookingTimeline />}
           </div>
         </div>
       </DialogContent>
