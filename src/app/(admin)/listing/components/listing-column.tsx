@@ -58,21 +58,6 @@ export const listingColumn: ColumnDef<Listing>[] = [
   { accessorKey: 'brand', header: 'Brand' },
   { accessorKey: 'size', header: 'Size' },
   {
-    accessorKey: 'colour',
-    header: 'Colour',
-    cell: ({ row }) => (
-      <div className="w-full flex justify-center">
-        <div className="flex items-center gap-2">
-          <span
-            className="w-4 h-4 rounded-full border"
-            style={{ backgroundColor: row.original.colour }}
-          />
-          <span>{row.original?.colour}</span>
-        </div>
-      </div>
-    ),
-  },
-  {
     accessorKey: 'approvalStatus',
     header: 'Status',
     cell: ({ row }) => {
@@ -84,7 +69,7 @@ export const listingColumn: ColumnDef<Listing>[] = [
 
       return (
         <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}
+          className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${statusColor}`}
         >
           {status}
         </span>

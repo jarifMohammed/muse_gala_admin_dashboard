@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
@@ -27,6 +28,8 @@ export default function ListingReviewModal({
   const queryClient = useQueryClient()
   const { data: session } = useSession()
   const accessToken = session?.user?.accessToken || ''
+  const [insuranceFee, setInsuranceFee] = useState<number>(5)
+  const [reasonsForRejection, setReasonsForRejection] = useState<string>('')
 
   // Fetch listing data
   const { data, isLoading, isError } = useQuery({
@@ -52,6 +55,18 @@ export default function ListingReviewModal({
   // --- Approve/Reject Mutation ---
   const statusMutation = useMutation({
     mutationFn: async (newStatus: 'approved' | 'rejected') => {
+      const payload: {
+        approvalStatus: string
+        insuranceFee?: number
+        reasonsForRejection?: string
+      } = { approvalStatus: newStatus }
+
+      if (newStatus === 'approved') {
+        payload.insuranceFee = insuranceFee
+      } else {
+        payload.reasonsForRejection = reasonsForRejection
+      }
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/${listing._id}`,
         {
@@ -60,7 +75,7 @@ export default function ListingReviewModal({
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify({ approvalStatus: newStatus }),
+          body: JSON.stringify(payload),
         }
       )
       if (!res.ok) throw new Error(`Failed to update status to ${newStatus}`)
@@ -77,8 +92,8 @@ export default function ListingReviewModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl w-full h-[90vh] py-6 overflow-hidden font-sans text-gray-600">
-        <ScrollArea className="h-[90vh] px-6 py-6">
+      <DialogContent className="max-w-3xl w-full h-[90vh] p-0 pt-8 pb-6 pr-2 overflow-hidden font-sans text-gray-600">
+        <ScrollArea className="h-[90vh] px-6">
           <DialogHeader>
             <div className="flex justify-center my-8">
               <Image
@@ -145,8 +160,16 @@ export default function ListingReviewModal({
                 <input
                   value={
                     Array.isArray(listing.size)
-                      ? listing.size.join(', ')
-                      : listing.size ?? ''
+                      ? listing.size
+                        .map(
+                          (s: string) =>
+                            s.charAt(0).toUpperCase() + s.slice(1)
+                        )
+                        .join(', ')
+                      : listing.size
+                        ? listing.size.charAt(0).toUpperCase() +
+                        listing.size.slice(1)
+                        : ''
                   }
                   readOnly
                   className="w-full border rounded px-3 py-2 mt-1 bg-transparent"
@@ -156,17 +179,23 @@ export default function ListingReviewModal({
               {/* Color */}
               <div>
                 <label className="font-medium">Color</label>
-                <div className="flex items-center gap-3 mt-1">
-                  <span
-                    className="w-6 h-6 rounded-full border"
-                    style={{ backgroundColor: listing.colour }}
-                  />
-                  <input
-                    value={listing.colour}
-                    readOnly
-                    className="flex-1 border rounded px-3 py-2 bg-transparent"
-                  />
-                </div>
+                <input
+                  value={
+                    Array.isArray(listing.colour)
+                      ? listing.colour
+                        .map(
+                          (c: string) =>
+                            c.charAt(0).toUpperCase() + c.slice(1)
+                        )
+                        .join(', ')
+                      : listing.colour
+                        ? listing.colour.charAt(0).toUpperCase() +
+                        listing.colour.slice(1)
+                        : ''
+                  }
+                  readOnly
+                  className="w-full border rounded px-3 py-2 mt-1 bg-transparent"
+                />
               </div>
 
               {/* Description */}
@@ -248,13 +277,26 @@ export default function ListingReviewModal({
                 />
               </div>
 
-              {/* Insurance */}
+              {/* Insurance Fee */}
               <div>
-                <label className="font-medium">Insurance</label>
+                <label className="font-medium">Insurance Fee ($)</label>
                 <input
-                  value={listing.insurance ? 'Yes' : 'No'}
-                  readOnly
-                  className="w-full border rounded px-3 py-2 mt-1 bg-transparent"
+                  type="number"
+                  value={insuranceFee}
+                  onChange={(e) => setInsuranceFee(Number(e.target.value))}
+                  className="w-full border rounded px-3 py-2 mt-1 bg-transparent focus:outline-none focus:ring-1 focus:ring-black"
+                />
+              </div>
+
+              {/* Rejection Note */}
+              <div>
+                <label className="font-medium">Rejection Note</label>
+                <textarea
+                  value={reasonsForRejection}
+                  onChange={(e) => setReasonsForRejection(e.target.value)}
+                  placeholder="Enter rejection reason if applicable"
+                  rows={2}
+                  className="w-full border rounded px-3 py-2 mt-1 bg-transparent focus:outline-none focus:ring-1 focus:ring-black"
                 />
               </div>
 

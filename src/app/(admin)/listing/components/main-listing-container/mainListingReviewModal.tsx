@@ -279,8 +279,8 @@ export default function MainListingReviewModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl w-full h-[90vh] py-2 overflow-hidden font-sans font-light text-gray-700">
-        <ScrollArea className="h-[90vh] px-6 py-6 space-y-6 pb-20">
+      <DialogContent className="max-w-4xl w-full h-[90vh] p-0 pt-8 pb-2 pr-2 overflow-hidden font-sans font-light text-gray-700">
+        <ScrollArea className="h-[90vh] px-6 space-y-6 pb-20">
           <DialogHeader>
             <div className="flex justify-center my-6">
               <Image src="/logo.png" alt="logo" width={60} height={60} />
@@ -391,7 +391,16 @@ export default function MainListingReviewModal({
               <div>
                 <label className="font-medium block mb-2">Sizes</label>
                 <Input
-                  value={formData.sizes?.join(', ') || 'Not specified'}
+                  value={
+                    Array.isArray(formData.sizes)
+                      ? formData.sizes
+                        .map(
+                          (s) =>
+                            s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
+                        )
+                        .join(', ')
+                      : 'Not specified'
+                  }
                   disabled
                   className="bg-gray-50"
                 />
@@ -401,24 +410,19 @@ export default function MainListingReviewModal({
               <div>
                 <label className="font-medium block mb-2">Colors</label>
                 <Input
-                  value={formData.colors?.join(', ') || 'Not specified'}
+                  value={
+                    Array.isArray(formData.colors)
+                      ? formData.colors
+                        .map(
+                          (c) =>
+                            c.charAt(0).toUpperCase() + c.slice(1).toLowerCase()
+                        )
+                        .join(', ')
+                      : 'Not specified'
+                  }
                   disabled
                   className="bg-gray-50"
                 />
-                {formData.colors && formData.colors.length > 0 && (
-                  <div className="flex gap-2 mt-3 flex-wrap">
-                    {formData.colors.map((clr, i) => (
-                      <div key={i} className="flex flex-col items-center gap-1">
-                        <div
-                          className="w-10 h-10 rounded-full border-2 border-gray-300 shadow-sm"
-                          style={{ backgroundColor: clr }}
-                          title={clr}
-                        />
-                        <span className="text-xs text-gray-500">{clr}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
               </div>
 
               {/* Prices */}

@@ -78,37 +78,19 @@ export const mainListingColumn: ColumnDef<mainListing>[] = [
   {
     accessorKey: 'sizes',
     header: 'Size',
-    cell: ({ row }) => (
-      <span className="text-gray-700">
-        {Array.isArray(row.original.sizes)
-          ? row.original.sizes.join(', ')
-          : row.original.sizes || '—'}
-      </span>
-    ),
-  },
-  {
-    accessorKey: 'colors',
-    header: 'Colour',
     cell: ({ row }) => {
-      const colors = row.original.colors || []
-      return (
-        <div className="flex items-center justify-center">
-          <div className="flex gap-1">
-            {colors.length > 0 ? (
-              colors.map((color: string, index: number) => (
-                <div
-                  key={index}
-                  className="w-4 h-4 rounded-full border border-gray-300"
-                  style={{ backgroundColor: color }}
-                  title={color}
-                ></div>
-              ))
-            ) : (
-              <span className="text-gray-400 text-sm">—</span>
-            )}
-          </div>
-        </div>
-      )
+      const sizes = row.original.sizes
+      const displayValue = Array.isArray(sizes)
+        ? (sizes as string[])
+          .map(
+            (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
+          )
+          .join(', ')
+        : typeof sizes === 'string'
+          ? (sizes as string).charAt(0).toUpperCase() + (sizes as string).slice(1).toLowerCase()
+          : '—'
+
+      return <span className="text-gray-700">{displayValue}</span>
     },
   },
   {
@@ -127,11 +109,10 @@ export const mainListingColumn: ColumnDef<mainListing>[] = [
       const isActive = row.original.isActive
       return (
         <Badge
-          className={`${
-            isActive
-              ? 'bg-green-100 text-green-700 border-green-200'
-              : 'bg-red-100 text-red-700 border-red-200'
-          }`}
+          className={`${isActive
+            ? 'bg-green-100 text-green-700 border-green-200'
+            : 'bg-red-100 text-red-700 border-red-200'
+            }`}
         >
           {isActive ? 'Active' : 'Paused'}
         </Badge>
