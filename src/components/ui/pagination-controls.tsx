@@ -18,13 +18,12 @@ interface PaginationControlsProps {
   onPageChange: (page: number) => void
 }
 
-export function PaginationControls({
-  currentPage,
-  totalPages,
-  totalItems,
-  itemsPerPage,
-  onPageChange,
-}: PaginationControlsProps) {
+export function PaginationControls(props: PaginationControlsProps) {
+  const currentPage = Number(props.currentPage)
+  const totalPages = Number(props.totalPages)
+  const totalItems = Number(props.totalItems)
+  const itemsPerPage = Number(props.itemsPerPage)
+  const onPageChange = props.onPageChange
   const getPageNumbers = () => {
     const pages: (number | '...')[] = []
 

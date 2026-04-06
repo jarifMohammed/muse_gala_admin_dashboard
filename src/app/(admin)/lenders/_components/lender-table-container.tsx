@@ -1,6 +1,6 @@
 'use client'
 import { DataTable } from '@/components/ui/data-table'
-// import { PaginationControls } from "@/components/ui/pagination-controls";
+import { PaginationControls } from "@/components/ui/pagination-controls";
 import useDebounce from '@/hook/useDebounce'
 import { LenderProfile, LendersGetResponse } from '@/types/lender'
 import { useQuery } from '@tanstack/react-query'
@@ -14,7 +14,6 @@ import {
 import { AlertTriangle } from 'lucide-react'
 import { lenderTableColumns } from './lender-table-column'
 import { useLenderSearchStore } from './state'
-// import { PaginationControls } from "@/components/ui/pagination-controls";
 
 interface LenderTableContainerProps {
   accessToken: string
@@ -77,7 +76,7 @@ const LenderTableContainer = ({ accessToken }: LenderTableContainerProps) => {
       <TableContainer
         data={data.data.data}
         columns={lenderTableColumns}
-        totalPages={data.data.pagination.totalPages}
+        pagination={data.data.pagination}
       />
     )
   }
@@ -90,11 +89,20 @@ export default LenderTableContainer
 interface TableProps {
   data: LenderProfile[]
   columns: ColumnDef<LenderProfile>[]
-  totalPages: number
+  pagination: {
+    currentPage?: number;
+    page?: number;     // optional alternative
+    totalPages?: number;
+    pages?: number;    // optional alternative
+    totalItems?: number;
+    total?: number;    // optional alternative
+    itemsPerPage?: number;
+    limit?: number;    // optional alternative
+  }
 }
 
-const TableContainer = ({ data, columns }: TableProps) => {
-  // const { page, setPage } = useLenderSearchStore();
+const TableContainer = ({ data, columns, pagination }: TableProps) => {
+  const { page, setPage } = useLenderSearchStore();
   const table = useReactTable({
     data,
     columns: columns,
@@ -106,17 +114,17 @@ const TableContainer = ({ data, columns }: TableProps) => {
       <div className="bg-white">
         <DataTable table={table} columns={columns} />
       </div>
-      {/* {totalPages > 1 && (
+      {(pagination.totalPages || pagination.pages || 1) > 1 && (
         <div className="mt-4 w-full  flex justify-end">
           <PaginationControls
-                currentPage={data.pagination.currentPage}
-                totalPages={data.pagination.totalPages}
-                totalItems={data.pagination.totalItems}
-                itemsPerPage={data.pagination.itemsPerPage}
-                onPageChange={(page) => setPage(page)}
+                currentPage={page || pagination.currentPage || pagination.page || 1}
+                totalPages={pagination.totalPages || pagination.pages || 1}
+                totalItems={pagination.totalItems || pagination.total || 0}
+                itemsPerPage={pagination.itemsPerPage || pagination.limit || 5}
+                onPageChange={(p) => setPage(p)}
               />
         </div>
-      )} */}
+      )}
     </>
   )
 }

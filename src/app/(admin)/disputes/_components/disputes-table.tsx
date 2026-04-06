@@ -143,23 +143,23 @@ const DisputesTable = ({ token }: { token: string }) => {
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex flex-col">
-                    <span className="text-sm font-mono">
-                      {dispute?.booking?.customer?._id}
-                    </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-sm font-semibold text-gray-900 block truncate">
                       {dispute?.booking?.customer?.firstName}{" "}
                       {dispute?.booking?.customer?.lastName}
+                    </span>
+                    <span className="text-xs text-gray-500 font-mono block truncate">
+                      {dispute?.booking?.customer?._id}
                     </span>
                   </div>
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex flex-col">
-                    <span className="text-sm font-mono">
-                      {dispute?.booking?.lender?._id}
-                    </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-sm font-semibold text-gray-900 block truncate">
                       {dispute?.booking?.lender?.firstName}{" "}
                       {dispute?.booking?.lender?.lastName}
+                    </span>
+                    <span className="text-xs text-gray-500 font-mono block truncate">
+                      {dispute?.booking?.lender?._id}
                     </span>
                   </div>
                 </TableCell>
