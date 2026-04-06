@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
@@ -30,6 +30,7 @@ export default function ListingReviewModal({
   const accessToken = session?.user?.accessToken || ''
   const [insuranceFee, setInsuranceFee] = useState<number>(5)
   const [reasonsForRejection, setReasonsForRejection] = useState<string>('')
+  const [dressName, setDressName] = useState<string>('')
 
   // Fetch listing data
   const { data, isLoading, isError } = useQuery({
@@ -52,6 +53,12 @@ export default function ListingReviewModal({
 
   const listing = data?.data
 
+  useEffect(() => {
+    if (listing?.dressName) {
+      setDressName(listing.dressName)
+    }
+  }, [listing?.dressName])
+
   // --- Approve/Reject Mutation ---
   const statusMutation = useMutation({
     mutationFn: async (newStatus: 'approved' | 'rejected') => {
@@ -59,10 +66,12 @@ export default function ListingReviewModal({
         approvalStatus: string
         insuranceFee?: number
         reasonsForRejection?: string
+        dressName?: string
       } = { approvalStatus: newStatus }
 
       if (newStatus === 'approved') {
         payload.insuranceFee = insuranceFee
+        payload.dressName = dressName
       } else {
         payload.reasonsForRejection = reasonsForRejection
       }
@@ -139,9 +148,9 @@ export default function ListingReviewModal({
               <div>
                 <label className="font-medium">Dress Name</label>
                 <input
-                  value={listing.dressName}
-                  readOnly
-                  className="w-full border rounded px-3 py-2 mt-1 bg-transparent"
+                  value={dressName}
+                  onChange={(e) => setDressName(e.target.value)}
+                  className="w-full border rounded px-3 py-2 mt-1 bg-transparent focus:outline-none focus:ring-1 focus:ring-black"
                 />
               </div>
 
