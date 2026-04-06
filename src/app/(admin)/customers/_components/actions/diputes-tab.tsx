@@ -22,7 +22,7 @@ interface DisputesTableProps {
 }
 
 const DisputesTab = ({ data }: Props) => {
-  console.log('disputes data', data)
+  // console.log('disputes data', data)
 
   return (
     <div className="space-y-6 w-full">

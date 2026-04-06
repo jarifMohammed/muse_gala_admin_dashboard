@@ -52,7 +52,7 @@ const MainListingContainer = ({ accessToken }: Props) => {
       ).then((res) => res.json()),
   })
 
-  console.log('Main listing data pagination:', data?.pagination)
+  // console.log('Main listing data pagination:', data?.pagination)
 
   const table = useReactTable({
     data: data?.data ?? [],

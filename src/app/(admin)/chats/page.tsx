@@ -10,7 +10,7 @@ const Page = async () => {
   if (!cu?.user) redirect('/sign-in')
 
   const accessToken = cu.user.accessToken
-  console.log(accessToken)
+  // console.log(accessToken)
 
   return (
     <div className="space-y-10">

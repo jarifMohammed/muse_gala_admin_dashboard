@@ -37,7 +37,7 @@ export async function loginAction(data: LoginFormValues) {
 
     const role = response.data.user.role
 
-    console.log(role)
+    // console.log(role)
 
     if (role !== 'ADMIN' && role !== 'SUPER_ADMIN') {
       return {
@@ -59,7 +59,7 @@ export async function loginAction(data: LoginFormValues) {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.log(error)
+    // console.log(error)
     return {
       success: false,
       message: error.message ?? 'Something went wrong!',

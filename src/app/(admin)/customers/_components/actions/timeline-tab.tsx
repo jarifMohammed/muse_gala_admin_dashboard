@@ -13,7 +13,7 @@ interface Props {
 }
 
 const TimelineTab = ({ data }: Props) => {
-  console.log('timeline data', data)
+  // console.log('timeline data', data)
 
   return (
     <div className="space-y-6 w-full">

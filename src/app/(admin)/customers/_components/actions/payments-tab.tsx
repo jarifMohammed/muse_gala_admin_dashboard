@@ -14,7 +14,7 @@ interface Props {
 }
 
 const PaymentsTab = ({ data }: Props) => {
-  console.log('payments data', data)
+  // console.log('payments data', data)
 
   // Calculate total revenue from bookings
   const totalRevenue =
@@ -132,8 +132,8 @@ const PaymentsTab = ({ data }: Props) => {
                           booking.status === 'Paid'
                             ? 'bg-green-100 text-green-800'
                             : booking.status === 'Pending'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-gray-100 text-gray-800'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-gray-100 text-gray-800'
                         )}
                       >
                         {booking.status}

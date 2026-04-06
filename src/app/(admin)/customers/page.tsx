@@ -9,7 +9,7 @@ const Page = async () => {
   if (!cu?.user) redirect('/sign-in')
 
   const accessToken = cu.user.accessToken
-  console.log('accessToken', accessToken)
+  // console.log('accessToken', accessToken)
 
   return (
     <div className="space-y-[30px] p-[10px] font-sans">

@@ -46,7 +46,7 @@ export function SendPromoModal({
   const sendToSelected = useSendPromoToSelected(promoId, accessToken)
 
   const users = usersData?.users || []
-  console.log('users for promo sending', users)
+  // console.log('users for promo sending', users)
 
   const filteredUsers = users?.filter((user: any) => {
     const searchLower = searchQuery.toLowerCase()

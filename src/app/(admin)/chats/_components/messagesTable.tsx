@@ -80,7 +80,7 @@ export default function MessageTable() {
     enabled: !!accessToken,
   })
 
-  console.log('data', chatRooms)
+  // console.log('data', chatRooms)
 
   // Transform API Data
   const conversations: Conversation[] = useMemo(() => {
@@ -113,7 +113,7 @@ export default function MessageTable() {
     })
   }, [chatRooms])
 
-  console.log('conversations', conversations)
+  // console.log('conversations', conversations)
 
   const filteredData = useMemo(() => {
     return conversations.filter(item => {
@@ -126,10 +126,10 @@ export default function MessageTable() {
         statusFilter === 'all'
           ? true
           : statusFilter === 'active'
-          ? item.status?.toLowerCase() === 'active'
-          : statusFilter === 'flagged'
-          ? item.flagged === true
-          : item.status?.toLowerCase() === statusFilter
+            ? item.status?.toLowerCase() === 'active'
+            : statusFilter === 'flagged'
+              ? item.flagged === true
+              : item.status?.toLowerCase() === statusFilter
 
       return matchesSearch && matchesStatus
     })
@@ -167,10 +167,10 @@ export default function MessageTable() {
           status === 'active'
             ? 'bg-green-100 text-green-700'
             : status === 'flagged'
-            ? 'bg-yellow-100 text-yellow-700'
-            : status === 'closed'
-            ? 'bg-gray-100 text-gray-700'
-            : 'bg-slate-100 text-slate-600'
+              ? 'bg-yellow-100 text-yellow-700'
+              : status === 'closed'
+                ? 'bg-gray-100 text-gray-700'
+                : 'bg-slate-100 text-slate-600'
 
         return (
           <Badge

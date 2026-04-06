@@ -62,7 +62,7 @@ const LenderListingContainer = ({ accessToken }: Props) => {
         .catch(() => ({ data: [], pagination: {} })),
   })
 
-  console.log('Lender Listings Data:', data)
+  // console.log('Lender Listings Data:', data)
 
   const table = useReactTable({
     data: data?.data ?? [],
