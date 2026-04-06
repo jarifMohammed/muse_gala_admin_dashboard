@@ -8,8 +8,6 @@ const Page = async () => {
   const cu = await auth()
   if (!cu?.user) redirect('/sign-in')
 
-  const accessToken = cu.user.accessToken
-  // console.log(accessToken)
 
   return (
     <div className="space-y-10">
