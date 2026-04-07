@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -44,6 +45,33 @@ const StatusTab = ({ data }: Props) => {
   });
 
   const queryClient = useQueryClient();
+  const cu = useSession();
+  const accessToken = cu?.data?.user?.accessToken || "";
+
+  const { isPending: isResendPending, mutate: resendPassword } = useMutation({
+    mutationKey: ["resend-password", data._id],
+    mutationFn: () =>
+      fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/application/${data._id}/resend-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      ).then((res) => res.json()),
+    onSuccess: (res) => {
+      if (!res.status) {
+        toast.error(res.message);
+        return;
+      }
+      toast.success(res.message);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const { isPending, mutate } = useMutation({
     mutationKey: ["status-update", data._id],
@@ -85,8 +113,21 @@ const StatusTab = ({ data }: Props) => {
           <CardTitle className="font-light">Account Status</CardTitle>
         </CardHeader>
         <CardContent className="text-[12px] font-light space-y-2">
-          <p>Current Status: {data.status}</p>
-          <p>Last Updated: {moment(data.updatedAt).format("MMM DD, YYYY")}</p>
+          <div className="space-y-2">
+            <p>Current Status: {data.status}</p>
+            <p>Last Updated: {moment(data.updatedAt).format("MMM DD, YYYY")}</p>
+          </div>
+          <div className="pt-2">
+            <Button
+              type="button"
+              className="bg-black text-white hover:bg-black/90"
+              size="sm"
+              onClick={() => resendPassword()}
+              disabled={isResendPending}
+            >
+              {isResendPending ? "Sending..." : "Resend Password"}
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
