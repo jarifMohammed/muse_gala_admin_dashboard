@@ -144,7 +144,7 @@ export function SendPromoModal({
                 <Input
                   placeholder="Search users..."
                   value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
+                  onChange={e => setSearchQuery(e.target.value.toLowerCase())}
                   className="max-w-xs"
                 />
                 <span className="text-sm text-gray-600">

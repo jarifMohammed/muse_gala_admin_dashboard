@@ -371,7 +371,7 @@ export const AdminTeamSection = ({
               type="email"
               placeholder="Enter email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value.toLowerCase())}
               disabled={mode === 'edit'}
               className={
                 mode === 'edit' ? 'bg-gray-100 cursor-not-allowed' : ''

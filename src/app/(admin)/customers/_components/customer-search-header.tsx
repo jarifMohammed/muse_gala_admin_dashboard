@@ -24,7 +24,7 @@ const CustomerSearchHeader = () => {
           <Input
             placeholder="Search customers..."
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => setValue(e.target.value.toLowerCase())}
           />
 
           <Select value={status} onValueChange={setStatus}>

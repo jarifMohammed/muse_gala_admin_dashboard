@@ -27,7 +27,7 @@ const FiltersRow = ({ onFilterChange }: FiltersRowProps) => {
                 <Input
                     placeholder="Search customer, email, booking ID..."
                     className="pl-10 h-10 border-gray-200"
-                    onChange={(e) => onFilterChange('search', e.target.value)}
+                    onChange={(e) => onFilterChange('search', e.target.value.toLowerCase())}
                 />
             </div>
 

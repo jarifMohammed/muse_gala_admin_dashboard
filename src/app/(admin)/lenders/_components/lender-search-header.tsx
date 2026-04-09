@@ -23,7 +23,7 @@ const LenderSearchHeader = () => {
           <Input
             placeholder="Search lenders..."
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => setValue(e.target.value.toLowerCase())}
           />
 
           <Select value={status} onValueChange={setStatus}>
