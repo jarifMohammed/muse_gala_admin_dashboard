@@ -14,6 +14,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
+import { Lender } from '../../types/listingsTypes'
 
 interface Props {
   open: boolean
@@ -142,7 +143,7 @@ export default function ListingReviewModal({
                 <label className="font-semibold text-lg text-black">Lenders Information</label>
                 {listing.lenders && listing.lenders.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {listing.lenders.map((lender: any) => (
+                    {listing.lenders.map((lender: Lender) => (
                       <div key={lender._id} className="border rounded-xl p-4 bg-gray-50/50 shadow-sm hover:shadow-md transition-shadow duration-200 border-gray-200">
                         <div className="flex items-center gap-3 mb-3 pb-2 border-b border-gray-100">
                           <div className="bg-black/5 p-2 rounded-full">

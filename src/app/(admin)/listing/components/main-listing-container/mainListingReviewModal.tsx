@@ -16,7 +16,7 @@ import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
 import { useSession } from 'next-auth/react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Upload, X, ImageIcon, AlertCircle, Instagram, Phone, MapPin, User, Mail } from 'lucide-react'
+import { Upload, X, ImageIcon, AlertCircle, Instagram, Phone, MapPin, User } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,6 +39,14 @@ interface ShippingDetails {
   isShippingAvailable?: boolean
 }
 
+interface Lender {
+  _id: string
+  fullName: string
+  phoneNumber: string
+  businessAddress: string
+  instagramHandle: string
+}
+
 interface MasterDressData {
   _id: string
   masterDressId: string
@@ -49,13 +57,7 @@ interface MasterDressData {
   sizes?: string[]
   colors?: string[]
   occasions?: string[]
-  lenders?: Array<{
-    _id: string;
-    fullName: string;
-    phoneNumber: string;
-    businessAddress: string;
-    instagramHandle: string;
-  }>
+  lenders?: Lender[]
   basePrice?: number
   insuranceFee?: number
   rrpPrice?: number
@@ -396,7 +398,7 @@ export default function MainListingReviewModal({
                   <label className="font-semibold text-lg text-black block mb-4">Lenders Information</label>
                   {formData.lenders && formData.lenders.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {formData.lenders.map((lender: any) => (
+                      {formData.lenders.map((lender: Lender) => (
                         <div key={lender._id} className="border rounded-xl p-4 bg-gray-50/50 shadow-sm hover:shadow-md transition-shadow duration-200 border-gray-200">
                           <div className="flex items-center gap-3 mb-3 pb-2 border-b border-gray-100">
                             <div className="bg-black/5 p-2 rounded-full">
@@ -428,7 +430,7 @@ export default function MainListingReviewModal({
                     </div>
                   ) : formData.lenderIds && formData.lenderIds.length > 0 ? (
                     <div className="space-y-2">
-                       {formData.lenderIds.map((item: any, idx) => (
+                       {formData.lenderIds.map((item: string | Lender, idx) => (
                          <div key={idx} className="bg-gray-50 p-2 rounded border text-sm text-gray-800">
                            {typeof item === 'object' ? item.fullName || item._id : item}
                          </div>
