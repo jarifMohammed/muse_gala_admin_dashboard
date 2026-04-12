@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
+import { Instagram, Phone, MapPin, User } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -136,13 +137,51 @@ export default function ListingReviewModal({
                 />
               </div>
 
-              <div>
-                <label className="font-medium">Lender Name</label>
-                <input
-                  value={listing.lenderId?.fullName ?? ''}
-                  readOnly
-                  className="w-full border rounded px-3 py-2 mt-1 bg-transparent"
-                />
+              {/* Lenders Information */}
+              <div className="space-y-4">
+                <label className="font-semibold text-lg text-black">Lenders Information</label>
+                {listing.lenders && listing.lenders.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {listing.lenders.map((lender: any) => (
+                      <div key={lender._id} className="border rounded-xl p-4 bg-gray-50/50 shadow-sm hover:shadow-md transition-shadow duration-200 border-gray-200">
+                        <div className="flex items-center gap-3 mb-3 pb-2 border-b border-gray-100">
+                          <div className="bg-black/5 p-2 rounded-full">
+                            <User className="w-5 h-5 text-black" />
+                          </div>
+                          <span className="font-bold text-gray-900">{lender.fullName}</span>
+                        </div>
+                        
+                        <div className="space-y-2.5 text-sm">
+                          <div className="flex items-center gap-3 text-gray-600">
+                            <Phone className="w-4 h-4 text-gray-400 shrink-0" />
+                            <span className="hover:text-black transition-colors">{lender.phoneNumber}</span>
+                          </div>
+                          
+                          {lender.instagramHandle && (
+                            <div className="flex items-center gap-3 text-gray-600">
+                              <Instagram className="w-4 h-4 text-gray-400 shrink-0" />
+                              <span className="hover:text-black transition-colors">@{lender.instagramHandle.replace('@', '')}</span>
+                            </div>
+                          )}
+                          
+                          <div className="flex items-start gap-3 text-gray-600 leading-tight">
+                            <MapPin className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
+                            <span>{lender.businessAddress}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div>
+                    <label className="font-medium">Lender Name</label>
+                    <input
+                      value={listing.lenderId?.fullName ?? ''}
+                      readOnly
+                      className="w-full border rounded px-3 py-2 mt-1 bg-transparent"
+                    />
+                  </div>
+                )}
               </div>
 
               <div>

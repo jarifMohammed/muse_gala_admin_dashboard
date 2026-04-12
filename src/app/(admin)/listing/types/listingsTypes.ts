@@ -8,9 +8,19 @@ export type lenderId = {
   _id: string;
 };
 
+export type Lender = {
+  _id: string;
+  fullName: string;
+  phoneNumber: string;
+  businessAddress: string;
+  instagramHandle: string;
+};
+
 export type Listing = {
   _id: string; // comes from transform in toJSON
-  lenderId: lenderId; // ObjectId serialized to string
+  lenderId?: lenderId; // Keep for backward compatibility if needed
+  lenderIds?: string[];
+  lenders?: Lender[];
   dressId: string;
   dressName: string;
   brand?: string;

@@ -16,14 +16,7 @@ import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
 import { useSession } from 'next-auth/react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Upload, X, ImageIcon } from 'lucide-react'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Upload, X, ImageIcon, AlertCircle, Instagram, Phone, MapPin, User, Mail } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,7 +27,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { AlertCircle } from 'lucide-react'
 
 interface Props {
   open: boolean
@@ -57,6 +49,13 @@ interface MasterDressData {
   sizes?: string[]
   colors?: string[]
   occasions?: string[]
+  lenders?: Array<{
+    _id: string;
+    fullName: string;
+    phoneNumber: string;
+    businessAddress: string;
+    instagramHandle: string;
+  }>
   basePrice?: number
   insuranceFee?: number
   rrpPrice?: number
@@ -394,27 +393,50 @@ export default function MainListingReviewModal({
                 </div>
 
                 <div>
-                  <label className="font-medium block mb-2">Lender IDs</label>
-
-                  <Select value={formData.lenderIds?.[0] ?? ''}>
-                    <SelectTrigger className="w-full bg-gray-50">
-                      <SelectValue placeholder="No lenders" />
-                    </SelectTrigger>
-
-                    <SelectContent>
-                      {formData.lenderIds?.length ? (
-                        formData.lenderIds.map((id) => (
-                          <SelectItem key={id} value={id}>
-                            {id}
-                          </SelectItem>
-                        ))
-                      ) : (
-                        <SelectItem disabled value="">
-                          No lenders
-                        </SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
+                  <label className="font-semibold text-lg text-black block mb-4">Lenders Information</label>
+                  {formData.lenders && formData.lenders.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {formData.lenders.map((lender: any) => (
+                        <div key={lender._id} className="border rounded-xl p-4 bg-gray-50/50 shadow-sm hover:shadow-md transition-shadow duration-200 border-gray-200">
+                          <div className="flex items-center gap-3 mb-3 pb-2 border-b border-gray-100">
+                            <div className="bg-black/5 p-2 rounded-full">
+                              <User className="w-5 h-5 text-black" />
+                            </div>
+                            <span className="font-bold text-gray-900">{lender.fullName}</span>
+                          </div>
+                          
+                          <div className="space-y-2.5 text-sm">
+                            <div className="flex items-center gap-3 text-gray-600">
+                              <Phone className="w-4 h-4 text-gray-400 shrink-0" />
+                              <span className="hover:text-black transition-colors">{lender.phoneNumber}</span>
+                            </div>
+                            
+                            {lender.instagramHandle && (
+                              <div className="flex items-center gap-3 text-gray-600">
+                                <Instagram className="w-4 h-4 text-gray-400 shrink-0" />
+                                <span className="hover:text-black transition-colors">@{lender.instagramHandle.replace('@', '')}</span>
+                              </div>
+                            )}
+                            
+                            <div className="flex items-start gap-3 text-gray-600 leading-tight">
+                              <MapPin className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
+                              <span>{lender.businessAddress}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : formData.lenderIds && formData.lenderIds.length > 0 ? (
+                    <div className="space-y-2">
+                       {formData.lenderIds.map((item: any, idx) => (
+                         <div key={idx} className="bg-gray-50 p-2 rounded border text-sm text-gray-800">
+                           {typeof item === 'object' ? item.fullName || item._id : item}
+                         </div>
+                       ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 italic text-sm">No lenders available</p>
+                  )}
                 </div>
               </div>
 

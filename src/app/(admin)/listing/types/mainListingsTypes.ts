@@ -23,4 +23,11 @@ export interface mainListing {
   approvalStatus?: 'pending' | 'approved' | 'rejected'
   createdAt?: string
   updatedAt?: string
+  lenders?: Array<{
+    _id: string;
+    fullName: string;
+    phoneNumber: string;
+    businessAddress: string;
+    instagramHandle: string;
+  }>
 }
