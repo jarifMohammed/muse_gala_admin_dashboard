@@ -24,6 +24,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { AlertCircle } from 'lucide-react'
 
 interface Props {
   open: boolean
@@ -81,6 +92,10 @@ export default function MainListingReviewModal({
 
   // Media state
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([])
+
+  // Validation state
+  const [showWarning, setShowWarning] = useState(false)
+  const [missingFields, setMissingFields] = useState<string[]>([])
 
   // ---------------- FETCH DATA ----------------
   const {
@@ -228,12 +243,15 @@ export default function MainListingReviewModal({
     fd.append('dressName', formData.dressName)
 
     if (formData.brand) fd.append('brand', formData.brand)
-    if (formData.basePrice !== undefined)
-      fd.append('basePrice', String(formData.basePrice))
-    if (formData.insuranceFee !== undefined)
-      fd.append('insuranceFee', String(formData.insuranceFee))
-    if (formData.rrpPrice !== undefined)
-      fd.append('rrpPrice', String(formData.rrpPrice))
+
+    // Handle number fields carefully to avoid "null" string conversion
+    const basePrice = formData.basePrice ?? 0
+    const insuranceFee = formData.insuranceFee ?? 0
+    const rrpPrice = formData.rrpPrice ?? 0
+
+    fd.append('basePrice', String(basePrice))
+    fd.append('insuranceFee', String(insuranceFee))
+    fd.append('rrpPrice', String(rrpPrice))
 
     if (formData.shippingDetails) {
       fd.append(
@@ -273,6 +291,29 @@ export default function MainListingReviewModal({
 
     // --- SUBMIT ---
     updateMutation.mutate(fd)
+  }
+
+  const handleSaveAttempt = () => {
+    if (!formData) return
+
+    const emptyFields: string[] = []
+    if (formData.basePrice === null || formData.basePrice === undefined)
+      emptyFields.push('Base Price')
+    if (formData.rrpPrice === null || formData.rrpPrice === undefined)
+      emptyFields.push('RRP Price')
+    if (
+      formData.insuranceFee === null ||
+      formData.insuranceFee === undefined
+    )
+      emptyFields.push('Insurance Fee')
+
+    // If active and fields are missing, warn
+    if (formData.isActive && emptyFields.length > 0) {
+      setMissingFields(emptyFields)
+      setShowWarning(true)
+    } else {
+      handleSave()
+    }
   }
 
   if (!open) return null
@@ -610,13 +651,45 @@ export default function MainListingReviewModal({
                   Cancel
                 </Button>
                 <Button
-                  onClick={handleSave}
+                  onClick={handleSaveAttempt}
                   disabled={updateMutation.isPending}
                   className="min-w-[100px]"
                 >
                   {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
+
+              {/* Warning Alert Dialog */}
+              <AlertDialog open={showWarning} onOpenChange={setShowWarning}>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="flex items-center gap-2 text-amber-600">
+                      <AlertCircle className="w-5 h-5" />
+                      Missing Fields Warning
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      The following fields are not set:{' '}
+                      <span className="font-semibold">
+                        {missingFields.join(', ')}
+                      </span>
+                      . {`If you continue, these will be set to 0 as default.`} Are
+                      you sure you want to proceed without filling these up?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Go Back</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => {
+                        setShowWarning(false)
+                        handleSave()
+                      }}
+                      className="bg-black text-white hover:bg-gray-800"
+                    >
+                      Continue Anyway
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           ) : (
             <div className="text-center py-20">

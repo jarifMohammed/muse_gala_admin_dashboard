@@ -6,6 +6,7 @@ export interface mainListing {
   colors: string[]
   lenderIds: string[]
   isActive: boolean
+  brand?: string
   thumbnail?: string
   media?: string[]
   pickupOption?: 'Local' | 'Australia-wide' | 'Both'

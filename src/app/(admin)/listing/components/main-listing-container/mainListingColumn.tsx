@@ -76,6 +76,15 @@ export const mainListingColumn: ColumnDef<mainListing>[] = [
     ),
   },
   {
+    accessorKey: 'brand',
+    header: 'Brand',
+    cell: ({ row }) => (
+      <span className="text-gray-700 capitalize">
+        {row.original.brand || '—'}
+      </span>
+    ),
+  },
+  {
     accessorKey: 'sizes',
     header: 'Size',
     cell: ({ row }) => {

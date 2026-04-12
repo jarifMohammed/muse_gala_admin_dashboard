@@ -135,7 +135,7 @@ export default function SignInForm() {
               disabled={isPending}
             >
               <span className="text-[14px] uppercase tracking-10 text-black">
-                {isPending ? 'SIGNING IN...' : 'SIGN IN'}
+                {isPending ? 'SIGNING IN' : 'SIGN IN'}
               </span>
               <ArrowRight className="w-5 h-5 text-black group-hover:translate-x-1 transition-transform" />
             </button>

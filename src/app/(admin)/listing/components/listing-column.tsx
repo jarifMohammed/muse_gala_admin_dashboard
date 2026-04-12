@@ -55,7 +55,13 @@ export const listingColumn: ColumnDef<Listing>[] = [
     ),
   },
   { accessorKey: 'dressName', header: 'Dress Name' },
-  { accessorKey: 'brand', header: 'Brand' },
+  {
+    accessorKey: 'brand',
+    header: 'Brand',
+    cell: ({ row }) => (
+      <span className="capitalize">{row.original.brand || '—'}</span>
+    ),
+  },
   { accessorKey: 'size', header: 'Size' },
   {
     accessorKey: 'approvalStatus',

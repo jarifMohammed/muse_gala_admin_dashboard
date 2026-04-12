@@ -89,7 +89,7 @@ export default function Sidebar({ session }: any) {
           </div>
         </div>
 
-        <nav className="flex-1 overflow-auto p-3">
+        <nav className="flex-1 overflow-auto p-3 no-scrollbar">
           <ul className="space-y-2">
             {allowedRoutes.map(route => {
               const isActive =
