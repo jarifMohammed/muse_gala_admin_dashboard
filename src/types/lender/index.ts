@@ -9,7 +9,32 @@ export interface LenderProfile {
     url: string
     type: string
   }
+  subscription: {
+    planId: string
+  }
   reviewStockMethod: ReviewStockMethod
+  location: {
+    type: 'Point'
+    coordinates: [number, number]
+  }
+  notificationPreferences: {
+    receiveEmailAlertsForNewOrders: boolean
+    sendRemindersForReturnDeadlines: boolean
+  }
+  payoutSettings: {
+    bankDetails: {
+      accountName: string
+      bsb: string
+      accountNumber: string
+      bankName: string
+    }
+    preferredMethod: 'Stripe' | 'Manual'
+    manualMethod: 'BankTransfer' | 'PayID'
+    payIDDetails?: {
+      type: 'Mobile' | 'Email' | 'ABN' | 'Organization ID'
+      value: string
+    }
+  }
   _id: string
   fullName: string
   phoneNumber: string
@@ -18,16 +43,18 @@ export interface LenderProfile {
   username: string
   dob: string | null
   gender: string
-  role: 'APPLICANT'
+  role: 'USER' | 'ADMIN' | 'LENDER' | 'SUPER_ADMIN' | 'APPLICANT'
   bio: string
   profileImage: string
   multiProfileImage: string[]
   otp: string | null
   otpExpires: string | null
+  pendingEmail: string | null
   refreshToken: string
   isActive: boolean
   hasActiveSubscription: boolean
   subscriptionExpireDate: string | null
+  subscriptionStartDate: string | null
   businessName: string
   abnNumber: string
   businessAddress: string
@@ -43,6 +70,10 @@ export interface LenderProfile {
   totalRatting: number
   totalListings: number
   totalReveneue: number
+  totalSpent: number
+  firstBookingDiscountUsed: boolean
+  spent300DiscountUsed: boolean
+  spent600DiscountUsed: boolean
   city?: string
   state?: string
   country?: string
@@ -52,6 +83,16 @@ export interface LenderProfile {
   latitude?: number
   longitude?: number
   address?: string
+  precision?: 'exact' | 'approximate' | 'interpolated'
+  stripeCustomerId?: string
+  defaultPaymentMethodId?: string
+  stripeAccountId?: string | null
+  chargesEnabled: boolean
+  payoutsEnabled: boolean
+  detailsSubmitted: boolean
+  stripeOnboardingCompleted: boolean
+  kycVerified: boolean
+  kycStatus: 'pending' | 'requires_input' | 'verified' | 'failed'
   status: 'pending' | 'approved' | 'rejected'
   applicationSubmittedAt: string
   applicationReviewedAt: string | null

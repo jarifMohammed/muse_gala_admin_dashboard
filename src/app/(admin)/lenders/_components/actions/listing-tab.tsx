@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Eye, Pencil } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 
 interface Props {
@@ -82,7 +82,6 @@ const ListingTab = ({ data, isLoading }: Props) => {
                     <th className="py-3 px-2 font-medium">Listing ID</th>
                     <th className="py-3 px-2 font-medium">Status</th>
                     <th className="py-3 px-2 font-medium">Price</th>
-                    <th className="py-3 px-2 font-medium">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -105,16 +104,6 @@ const ListingTab = ({ data, isLoading }: Props) => {
                       </td>
                       <td className="py-3 px-2">
                         ${listing.rentalPrice?.fourDays || 0}
-                      </td>
-                      <td className="py-3 px-2">
-                        <div className="flex gap-2">
-                          <button className="p-1 hover:bg-gray-200 rounded">
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <button className="p-1 hover:bg-gray-200 rounded">
-                            <Pencil className="w-4 h-4" />
-                          </button>
-                        </div>
                       </td>
                     </tr>
                   ))}

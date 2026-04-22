@@ -111,6 +111,7 @@ interface Lender {
   email: string;
   firstName: string;
   lastName: string;
+  fullName: string;
 }
 
 interface StatusHistory {

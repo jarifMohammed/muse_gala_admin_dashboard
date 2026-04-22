@@ -11,6 +11,7 @@ interface StatsResponse {
   data: {
     totalCustomers: number
     totalBookings: number
+    totalPendingVerifications: number
   }
 }
 
@@ -46,8 +47,9 @@ const CustomersHeader = () => {
   // React Query
   // ------------------------------
   const { data, isLoading, error } = useQuery({
-    queryKey: ['customer-stats'],
+    queryKey: ['customer-stats', accessToken],
     queryFn: fetchStats,
+    enabled: !!accessToken,
   })
 
   return (
@@ -79,16 +81,18 @@ const CustomersHeader = () => {
           <>
             <InfoCard
               title="Total Customers"
-              value={data?.totalCustomers.toString() || ''}
+              value={data?.totalCustomers.toString() || '0'}
             />
 
             <InfoCard
               title="Total Bookings"
-              value={data?.totalBookings.toString() || ''}
+              value={data?.totalBookings.toString() || '0'}
             />
 
-            {/* If backend adds more later, placeholder for now */}
-            <InfoCard title="Pending verifications" value="0" />
+            <InfoCard
+              title="Pending verifications"
+              value={data?.totalPendingVerifications.toString() || '0'}
+            />
           </>
         )}
       </div>

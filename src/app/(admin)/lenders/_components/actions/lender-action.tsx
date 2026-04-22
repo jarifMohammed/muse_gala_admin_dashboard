@@ -17,7 +17,7 @@ import StatusTab from './status-tab'
 import MetricsTab from './matrics-tab'
 import ListingTab from './listing-tab'
 import DisputesTab from './disputs-tab'
-import DocumentsTab from './documents-tab'
+import PayoutTab from './payout-tab'
 import TimelineTab from './timeline-tab'
 
 interface Props {
@@ -96,9 +96,9 @@ const LenderAction = ({ data }: Props) => {
       ),
     },
     {
-      id: 'documents',
-      label: 'Documents',
-      content: <DocumentsTab data={lenderDetails?.data?.lender || data} />,
+      id: 'payout',
+      label: 'Payout & Payment',
+      content: <PayoutTab data={lenderDetails?.data?.lender || (data as any)} />,
     },
     // {
     //   id: 'notes',

@@ -7,8 +7,9 @@ const BookingLender = ({ bookingDetails }: { bookingDetails: Booking }) => {
         <h1 className="text-xl mb-4">Lender Details</h1>
 
         <div className="text-sm space-y-2">
-          <h3>Lender ID: {bookingDetails?.allocatedLender?.lenderId?._id || "N/A"}</h3>
-          <h3>Name: {bookingDetails?.allocatedLender?.lenderId?.firstName || "N/A"} {bookingDetails?.allocatedLender?.lenderId?.lastName}</h3>
+          <h3>Lender ID: {bookingDetails?.allocatedLender?.lenderId?._id || (typeof bookingDetails?.allocatedLender?.lenderId === "string" ? bookingDetails.allocatedLender.lenderId : "N/A")}</h3>
+          <h3>Name: {bookingDetails?.allocatedLender?.lenderId?.fullName || 
+              (bookingDetails?.allocatedLender?.lenderId?.firstName ? `${bookingDetails.allocatedLender.lenderId.firstName} ${bookingDetails.allocatedLender.lenderId.lastName || ""}` : "N/A")}</h3>
           <h3>Email: {bookingDetails?.allocatedLender?.lenderId?.email || "N/A"}</h3>
           <h3>Dress Name: {bookingDetails?.dressName || "N/A"}</h3>
         </div>

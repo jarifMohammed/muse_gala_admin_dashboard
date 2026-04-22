@@ -8,13 +8,16 @@ const BookingSummery = ({ bookingDetails }: { bookingDetails?: Booking }) => {
 
         <div className="text-sm space-y-2">
           <h3>Booking ID: {bookingDetails?._id}</h3>
+          <h3>Customer ID: {bookingDetails?.customer?._id || "N/A"}</h3>
+          <h3>Dress ID: {bookingDetails?.masterdressId || "N/A"}</h3>
           <h3>
-            Customer Name: {bookingDetails?.customer?.firstName}{" "}
-            {bookingDetails?.customer?.lastName}
+            Customer Name: {bookingDetails?.customer?.fullName || 
+              (bookingDetails?.customer?.firstName ? `${bookingDetails.customer.firstName} ${bookingDetails.customer.lastName || ""}` : "N/A")}
           </h3>
           <h3>
-            Lender Name: {bookingDetails?.allocatedLender?.lenderId?.firstName}{" "}
-            {bookingDetails?.allocatedLender?.lenderId?.lastName}
+            Lender Name: {bookingDetails?.allocatedLender?.lenderId?.fullName || 
+              (bookingDetails?.allocatedLender?.lenderId?.firstName ? `${bookingDetails.allocatedLender.lenderId.firstName} ${bookingDetails.allocatedLender.lenderId.lastName || ""}` : 
+              (typeof bookingDetails?.allocatedLender?.lenderId === "string" ? `ID: ${bookingDetails.allocatedLender.lenderId}` : "N/A"))}
           </h3>
           <h3>Dress Name: {bookingDetails?.dressName}</h3>
           {bookingDetails?.createdAt && (

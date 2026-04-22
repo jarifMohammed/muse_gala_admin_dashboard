@@ -17,6 +17,7 @@ import BookingsModal from "./bookings-modal";
 export interface BookingItem {
   _id: string;
   customer: string;
+  customerName: string;
   listing: string;
   masterdressId: string;
   dressName: string;
@@ -76,8 +77,7 @@ const BookingsTable = ({
           <TableHeader>
             <TableRow className="border-none text-base">
               <TableHead className="text-center">Booking ID</TableHead>
-              <TableHead className="text-center">Customer ID</TableHead>
-              <TableHead className="text-center">Dress ID</TableHead>
+              <TableHead className="text-center">Dress Name</TableHead>
               <TableHead className="text-center">Booking Date</TableHead>
               <TableHead className="text-center text-nowrap">Amount</TableHead>
               <TableHead className="text-center text-nowrap">Status</TableHead>
@@ -89,7 +89,7 @@ const BookingsTable = ({
             {isLoading || isFetching ? (
               Array.from({ length: 10 }).map((_, i) => (
                 <TableRow key={i}>
-                  {Array.from({ length: 7 }).map((_, j) => (
+                  {Array.from({ length: 6 }).map((_, j) => (
                     <TableCell key={j} className="text-center">
                       <Skeleton className="h-5 w-20 mx-auto" />
                     </TableCell>
@@ -101,10 +101,7 @@ const BookingsTable = ({
                 <TableRow key={item?._id}>
                   <TableCell className="text-center">{item?._id}</TableCell>
                   <TableCell className="text-center">
-                    {item?.customer || "N/A"}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {item?.masterdressId}
+                    {item?.dressName || "N/A"}
                   </TableCell>
                   <TableCell className="text-center">
                     {item?.createdAt ? new Date(item.createdAt).toLocaleDateString() : "N/A"}
@@ -136,7 +133,7 @@ const BookingsTable = ({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={6}
                   className="text-center py-6 text-gray-500"
                 >
                   No bookings found
