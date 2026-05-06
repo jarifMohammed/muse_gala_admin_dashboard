@@ -11,8 +11,7 @@ const BookingSummery = ({ bookingDetails }: { bookingDetails?: Booking }) => {
           <h3>Customer ID: {bookingDetails?.customer?._id || "N/A"}</h3>
           <h3>Dress ID: {bookingDetails?.masterdressId || "N/A"}</h3>
           <h3>
-            Customer Name: {bookingDetails?.customer?.fullName || 
-              (bookingDetails?.customer?.firstName ? `${bookingDetails.customer.firstName} ${bookingDetails.customer.lastName || ""}` : "N/A")}
+            Customer Name: {bookingDetails?.customer?.firstName ? `${bookingDetails.customer.firstName} ${bookingDetails.customer.lastName || ""}` : "N/A"}
           </h3>
           <h3>
             Lender Name: {bookingDetails?.allocatedLender?.lenderId?.fullName || 
