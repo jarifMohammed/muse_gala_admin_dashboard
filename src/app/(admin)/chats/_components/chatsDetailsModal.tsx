@@ -203,17 +203,19 @@ export function ChatsDetailsPopup({
               <strong>Booking ID:</strong> {conversation?.bookingId || 'N/A'}
             </p>
             <p>
-              <strong>Customer ID:</strong> {conversation.customerId || 'N/A'}
+              <strong>Customer:</strong>{' '}
+              {conversation.customerName || 'N/A'} (
+              <span className="text-xs text-gray-500">
+                {conversation.customerId || 'N/A'}
+              </span>
+              )
             </p>
             <p>
-              <strong>Lender ID:</strong> {conversation.lenderId || 'N/A'}
-            </p>
-            <p>
-              <strong>Customer Name:</strong>{' '}
-              {conversation.customerName || 'N/A'}
-            </p>
-            <p>
-              <strong>Lender Name:</strong> {conversation.lenderName || 'N/A'}
+              <strong>Lender:</strong> {conversation.lenderName || 'N/A'} (
+              <span className="text-xs text-gray-500">
+                {conversation.lenderId || 'N/A'}
+              </span>
+              )
             </p>
             <p>
               <strong>Status:</strong>{' '}
@@ -281,7 +283,8 @@ export function ChatsDetailsPopup({
                   <div className="flex flex-col gap-3">
                     {messages.map(message => {
                       const isLender =
-                        message.sender._id === conversation.lenderId
+                        message.sender._id === conversation.lenderId ||
+                        message.sender.role === 'LENDER'
                       const messageDate = new Date(message.createdAt)
                       const time = messageDate.toLocaleTimeString('en-US', {
                         hour: '2-digit',

@@ -108,7 +108,7 @@ export default function MessageTable() {
         date: room.lastMessageAt || room.updatedAt || room.createdAt,
         bookingId: room.bookingId?._id || 'N/A',
         status: room.status, // or derive dynamically if needed
-        flagged: room.flagged.status || false,
+        flagged: room.flagged?.status === true || false,
       }
     })
   }, [chatRooms])
@@ -163,12 +163,13 @@ export default function MessageTable() {
       header: 'Status',
       cell: ({ row }) => {
         const status = row.original.status || 'N/A'
+        const lowerStatus = status.toLowerCase()
         const color =
-          status === 'active'
+          lowerStatus === 'active'
             ? 'bg-green-100 text-green-700'
-            : status === 'flagged'
+            : lowerStatus === 'flagged'
               ? 'bg-yellow-100 text-yellow-700'
-              : status === 'closed'
+              : lowerStatus === 'closed'
                 ? 'bg-gray-100 text-gray-700'
                 : 'bg-slate-100 text-slate-600'
 
@@ -234,7 +235,7 @@ export default function MessageTable() {
         <Select
           value={statusFilter}
           onValueChange={value =>
-            setStatusFilter(value as 'active' | 'flagged' | 'closed')
+            setStatusFilter(value as 'active' | 'flagged' | 'closed' | 'all')
           }
         >
           <SelectTrigger className="w-[150px]">
